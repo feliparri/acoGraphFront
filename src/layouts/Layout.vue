@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header class="navbar-background" elevated>
       <q-toolbar>
         <q-btn
           flat
@@ -12,10 +12,12 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          GESTION DE PRODUCCION TEMPORADA 2019-2020
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>
+          <userMenu></userMenu>
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -23,37 +25,41 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-grey-1"
+      content-class="sidebar-background"
     >
       <q-list>
         <q-item-label
           header
-          class="text-grey-8"
+          class="text-white-8"
         >
-          Essential Links
+          <img src="../assets/logoTammFix.png" alt="">
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
+          link.disable
+          v-show="!link.disable"
         />
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view></router-view>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
 import EssentialLink from 'components/EssentialLink'
+import userMenu from '../components/userMenu.vue'
 
 export default {
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    userMenu
   },
 
   data () {
@@ -62,24 +68,44 @@ export default {
       essentialLinks: [
         {
           title: 'Home',
-          caption: 'quasar.dev',
-          icon: 'home',
-          link: 'https://quasar.dev'
+          caption: '',
+          icon: 'fiber_manual_record',
+          link: '/dashboard',
+          disable: false
         },
         {
-          title: 'Dashboard',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: 'https://github.com/quasarframework'
+          title: 'Reportes',
+          caption: '',
+          icon: 'fiber_manual_record',
+          link: '/reportes',
+          disable: false
         },
         {
           title: 'Items',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: 'https://github.com/quasarframework'
+          caption: '',
+          icon: 'fiber_manual_record',
+          link: '/',
+          disable: true
         }
       ]
     }
   }
 }
 </script>
+<style>
+.sidebar-background{
+  background-color: #473f5d;
+  color:white;
+  border-right: 1px solid #473f5d !important;
+}
+.navbar-background{
+  background-color: #ffffff;
+  color:#7a777e;
+}
+.q-toolbar__title{
+  font-size:14px !important;
+}
+.q-drawer{
+  border-right: 1px solid #473f5d !important;
+}
+</style>

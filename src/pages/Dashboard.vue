@@ -5,7 +5,7 @@
         <dashRecepcion></dashRecepcion>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecepcion></dashRecepcion>
+        <dashProduccion></dashProduccion>
       </div>
     </div>
   </div>
@@ -13,8 +13,10 @@
 
 <script>
 import dashRecepcion from '../components/dashRecepcion.vue'
+import dashProduccion from '../components/dashProduccion.vue'
 export default {
   components: {
+    dashProduccion,
     dashRecepcion
   }
 }

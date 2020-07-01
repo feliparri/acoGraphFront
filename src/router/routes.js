@@ -1,11 +1,17 @@
 
+import Layout from 'layouts/Layout'
+import Index from 'pages/Index'
+import Dashboard from 'pages/Dashboard'
+import Reportes from 'pages/Reportes'
+
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/Layout.vue'),
+    component: Layout,
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
-      { path: '/dashboard', component: () => import('pages/Dashboard.vue') }
+      { path: '', name: 'index', component: Index },
+      { path: '/dashboard/', name: 'dashboard', component: Dashboard },
+      { path: '/reportes/', name: 'reportes', component: Reportes }
     ]
   }
 ]

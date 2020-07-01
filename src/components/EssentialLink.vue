@@ -1,8 +1,10 @@
 <template>
   <q-item
+    class="sidebarStyle"
+    :disable="disable"
     clickable
     tag="a"
-    target="_blank"
+    target="_self"
     :href="link"
   >
     <q-item-section
@@ -13,8 +15,8 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
-      <q-item-label caption>
+      <q-item-label class="sidebarStyle">{{ title }}</q-item-label>
+      <q-item-label class="sidebarStyle" caption>
         {{ caption }}
       </q-item-label>
     </q-item-section>
@@ -43,7 +45,19 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    disable: {
+      type: Boolean,
+      default: false
     }
+
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.sidebarStyle{
+  color:white;
+  text-text-decoration:none !important;
+}
+</style>

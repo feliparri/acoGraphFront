@@ -30,7 +30,7 @@
 
       <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5">
         <div class="echarts">
-          <IEcharts :resizable="true" :option="bar" :loading="loading" @ready="onReady" @click="onClick" />
+          <IEcharts :resizable="true" :option="pie" :loading="loading" @ready="onReady" @click="onClick" />
           <!--<button class="btnRandom" @click="doRandom">Random</button>-->
         </div>
         <q-btn flat round dense icon="plus" />
@@ -51,11 +51,8 @@ export default {
     layout: 'comfortable',
     side: 'right',
     loading: false,
-    bar: {
-      title: {
-        text: ''
-      },
-      tooltip: {},
+    pie: {
+      /* tooltip: {},
       xAxis: {
         data: [
           'Shirt',
@@ -66,12 +63,28 @@ export default {
           'Socks'
         ]
       },
-      yAxis: {},
+      yAxis: {}, */
+      title: {
+        text: 'PROD. X CALIBRE',
+        x: 'center',
+        textStyle: { fontSize: '11' }
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+      },
       series: [
         {
           name: 'Sales',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
+          type: 'pie',
+          data: [
+            // 5, 20, 36, 10, 10, 20
+            { value: 335, name: '直接访问' },
+            { value: 310, name: '邮件营销' },
+            { value: 234, name: '联盟广告' },
+            { value: 135, name: '视频广告' },
+            { value: 1548, name: '搜索引擎' }
+          ]
         }
       ]
     }
@@ -95,7 +108,7 @@ export default {
         data.push(Math.floor(Math.random() * (max + 1 - min) + min))
       }
       that.loading = !that.loading
-      that.bar.series[0].data = data
+      that.pie.series[0].data = data
     },
     onReady (instance, ECharts) {
       console.log(instance, ECharts)
