@@ -3,6 +3,7 @@ import Layout from 'layouts/Layout'
 import Index from 'pages/Index'
 import Dashboard from 'pages/Dashboard'
 import Reportes from 'pages/Reportes'
+// import router from '.'
 
 const routes = [
   {
@@ -15,6 +16,8 @@ const routes = [
     ]
   }
 ]
+
+// const openRoutes = ['Login', 'Register']
 
 // Always leave this as last one
 if (process.env.MODE !== 'ssr') {

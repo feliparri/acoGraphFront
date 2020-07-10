@@ -9,13 +9,14 @@
       :visible-columns="visibleColumns"
     >
       <template v-slot:top>
-        <img
-          style="height: 50px; width: 50px"
-          src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg"
-        >
-
+        <div class="col-6 q-table__title">Recepciones por periodo</div>
+        <div class="col-3">
+          <q-datetime-picker mode="date" label="Desde" v-model="date"></q-datetime-picker>
+        </div>
+        <div class="col-3">
+          <q-datetime-picker mode="date" label="Hasta" v-model="date"></q-datetime-picker>
+        </div>
         <q-space />
-
         <q-select
           v-model="visibleColumns"
           multiple
@@ -33,18 +34,32 @@
       </template>
 
     </q-table>
+    <br>
+    <div class="row q-col-gutter-lg">
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <dashRecepcion></dashRecepcion>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <dashProduccion></dashProduccion>
+      </div>
+    </div>
   </div>
 </template>
 
 <script type="text/babel">
 // import IEcharts from 'vue-echarts-v3/src/full.js'
+import dashRecepcion from '../components/dashRecepcion.vue'
+import dashProduccion from '../components/dashProduccion.vue'
 export default {
   name: 'reportes',
   components: {
     // IEcharts
+    dashRecepcion,
+    dashProduccion
   },
   props: {},
   data: () => ({
+    date: '',
     visibleColumns: ['calories', 'desc', 'protein', 'sodium', 'iron'],
     columns: [
       {
@@ -175,6 +190,9 @@ export default {
   destroyed () {
   },
   methods: {
+    dateOptionsB (date) {
+      return date >= '2019/02/03' && date <= '2020/12/15'
+    }
   }
 }
 

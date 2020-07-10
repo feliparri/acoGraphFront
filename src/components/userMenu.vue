@@ -29,6 +29,9 @@ export default {
   destroyed () {
   },
   methods: {
+    onItemClick () {
+      console.log('asdasd')
+    }
   }
 }
 
