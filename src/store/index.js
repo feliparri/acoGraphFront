@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// import example from './module-example'
+import reports from './reports'
 
 Vue.use(Vuex)
 
@@ -17,13 +17,19 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // example
+      reports
     },
-
     // enable strict mode (adds overhead!)
     // for dev mode only
     strict: process.env.DEV
   })
+
+  if (process.env.DEV && module.hot) {
+    module.hot.accept(['./reports'], () => {
+      const newReports = require('./reports').default
+      Store.hotUpdate({ modules: { reports: newReports } })
+    })
+  }
 
   return Store
 }
