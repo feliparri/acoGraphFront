@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import routes from './routes'
 
 Vue.use(VueRouter)
@@ -14,7 +13,7 @@ Vue.use(VueRouter)
  * with the Router instance.
  */
 
-export default function (/* { store, ssrContext } */) {
+export default function ({ store }) {
   const Router = new VueRouter({
     scrollBehavior: () => ({ x: 0, y: 0 }),
     routes,
@@ -24,6 +23,26 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  })
+
+  Router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      // next()
+      if (!store.getters['reports/loggedIn']) {
+        // console.log('va a login->' + !store.getters.loggedIn)
+        next({ name: 'login' })
+      } else {
+        // console.log('va al next')
+        next()
+      }
+    } else if (to.matched.some(record => record.meta.requiresVisitor)) {
+      console.log(store.getters['reports/loggedIn'])
+      if (store.getters['reports/loggedIn']) {
+        next({ name: 'home' })
+      } else {
+        next()
+      }
+    }
   })
 
   return Router
