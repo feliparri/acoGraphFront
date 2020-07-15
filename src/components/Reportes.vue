@@ -7,30 +7,40 @@
       :columns="columns"
       row-key="name"
       :visible-columns="visibleColumns"
+      :loading="loading"
     >
       <template v-slot:top>
-        <div class="col-6 q-table__title">Recepciones por periodo</div>
-        <div class="col-3">
-          <q-datetime-picker mode="date" label="Desde" v-model="date"></q-datetime-picker>
+        <div class="q-pa-md">
+          <div class="row q-col-gutter-md">
+            <div class="col-12 q-table__title">Recepciones por periodo  <q-btn class=" float-right" round color="secondary" icon="search" /></div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
+              <q-datetime-picker mode="date" label="Desde" v-model="dateFrom"></q-datetime-picker>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
+              <q-datetime-picker mode="date" label="Hasta" v-model="dateTo"></q-datetime-picker>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <q-select
+                v-model="visibleColumns"
+                multiple
+                :disable="select_disable"
+                :dense="dense"
+                :options-dense="optionsdense"
+                :display-value="$q.lang.table.columns"
+                emit-value
+                map-options
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :options="columns"
+                option-value="name"
+                @filter="filterFn"
+              />
+            </div>
+             <!-- <div class="col-lg-1 col-md-3 gt-sm">
+              <q-btn round color="secondary" icon="search" />
+            </div> -->
+          </div>
         </div>
-        <div class="col-3">
-          <q-datetime-picker mode="date" label="Hasta" v-model="date"></q-datetime-picker>
-        </div>
-        <q-space />
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          outlined
-          dense
-          options-dense
-          :display-value="$q.lang.table.columns"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 150px"
-        />
       </template>
 
     </q-table>
@@ -59,139 +69,70 @@ export default {
   },
   props: {},
   data: () => ({
-    date: '',
-    visibleColumns: ['calories', 'desc', 'protein', 'sodium', 'iron'],
-    columns: [
-      {
-        name: 'name',
-        required: true,
-        label: 'Dessert (100g serving)',
-        align: 'left',
-        field: row => row.name,
-        format: val => `${val}`,
-        sortable: true,
-        classes: 'bg-grey-2 ellipsis',
-        style: 'max-width: 100px',
-        headerClasses: 'bg-primary text-white'
-      },
-      { name: 'calories', align: 'center', label: 'Calories', field: 'calories', sortable: true },
-      { name: 'fat', label: 'Fat (g)', field: 'fat', sortable: true },
-      { name: 'carbs', label: 'Carbs (g)', field: 'carbs' },
-      { name: 'protein', label: 'Protein (g)', field: 'protein' },
-      { name: 'sodium', label: 'Sodium (mg)', field: 'sodium' },
-      { name: 'calcium', label: 'Calcium (%)', field: 'calcium', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) },
-      { name: 'iron', label: 'Iron (%)', field: 'iron', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10) }
-    ],
-    data: [
-      {
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        sodium: 87,
-        calcium: '14%',
-        iron: '1%'
-      },
-      {
-        name: 'Ice cream sandwich',
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        sodium: 129,
-        calcium: '8%',
-        iron: '1%'
-      },
-      {
-        name: 'Eclair',
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        sodium: 337,
-        calcium: '6%',
-        iron: '7%'
-      },
-      {
-        name: 'Cupcake',
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        sodium: 413,
-        calcium: '3%',
-        iron: '8%'
-      },
-      {
-        name: 'Gingerbread',
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        sodium: 327,
-        calcium: '7%',
-        iron: '16%'
-      },
-      {
-        name: 'Jelly bean',
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        sodium: 50,
-        calcium: '0%',
-        iron: '0%'
-      },
-      {
-        name: 'Lollipop',
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        sodium: 38,
-        calcium: '0%',
-        iron: '2%'
-      },
-      {
-        name: 'Honeycomb',
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        sodium: 562,
-        calcium: '0%',
-        iron: '45%'
-      },
-      {
-        name: 'Donut',
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        sodium: 326,
-        calcium: '2%',
-        iron: '22%'
-      },
-      {
-        name: 'KitKat',
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        sodium: 54,
-        calcium: '12%',
-        iron: '6%'
-      }
-    ]
+    dateFrom: '',
+    dateTo: '',
+    visibleColumns: [],
+    columns: [],
+    data: [],
+    loading: true,
+    dense: false,
+    optionsdense: true,
+    select_disable: true
   }),
   created () {
+    this.loadTableData()
   },
   destroyed () {
   },
   methods: {
     dateOptionsB (date) {
       return date >= '2019/02/03' && date <= '2020/12/15'
+    },
+    loadTableData () {
+      this.loading = true
+      this.$store.dispatch('reports/getTableData', {
+        username: this.username,
+        password: this.password
+      }).then(response => {
+        /* DATA */
+        response.data.data.forEach((value, index) => {
+          this.data.push(value)
+        })
+        this.loading = false
+        this.select_disable = false
+      })
+      this.loadTableRows()
+    },
+    loadTableRows () {
+      this.loading = true
+      this.$store.dispatch('reports/getTableData', {
+        username: this.username,
+        password: this.password
+      }).then(response => {
+        /* COLUMNS */
+        Object.keys(response.data.data[0]).forEach((value, index) => {
+          this.columns.push({ name: value, align: 'left', label: value, field: value, sortable: true })
+        })
+        this.visibleColumns.push('tipo_Mov', 'Lote', 'fecha_cosecha', 'peso_neto', 'ESTADO')
+        this.loading = false
+      })
+    },
+    filterFn (val, update) {
+      if (val === '') {
+        update(() => {
+          this.options = this.columns
+
+          // with Quasar v1.7.4+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options = this.columns.filter(v => v.toLowerCase().indexOf(needle) > -1)
+      })
     }
   }
 }

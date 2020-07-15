@@ -1,19 +1,36 @@
 
 import Layout from 'layouts/Layout'
-import Index from 'pages/Index'
+// import Index from 'pages/Index'
 import Dashboard from 'pages/Dashboard'
 import Reportes from 'pages/Reportes'
+import Login from 'components/auth/login'
+import Logout from 'components/auth/logout'
+// import Store from '../store'
 // import router from '.'
 
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: Layout,
+    meta: { requiresAuth: true },
     children: [
-      { path: '', name: 'index', component: Index },
+      // { path: '/dashboard', name: 'index', component: Index },
       { path: '/dashboard/', name: 'dashboard', component: Dashboard },
       { path: '/reportes/', name: 'reportes', component: Reportes }
     ]
+  },
+  {
+    path: '/login',
+    component: Login,
+    name: 'login',
+    meta: { requiresVisitor: true }
+  },
+  {
+    path: '/logout',
+    component: Logout,
+    name: 'logout',
+    meta: { requiresVisitor: true }
   }
 ]
 
