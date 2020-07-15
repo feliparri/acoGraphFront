@@ -37,3 +37,18 @@ export function destroyToken (context) {
     })
   }
 }
+
+export function getTableData (context, credentials) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.get('http://localhost/api/getResumenLote?page=1')
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}

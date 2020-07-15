@@ -4,23 +4,45 @@
       <q-page class="bg-login window-height window-width row justify-center items-center">
         <div class="column">
           <h2 class="login-heading"><img src="../../assets/logoTammFix.png" alt=""></h2>
-          <form action="#" @submit.prevent="login">
-
-            <div class="form-control">
-              <label for="email">Username/Email</label>
-              <input type="email" name="username" id="username" class="login-input" v-model="username">
+          <q-form action="#" @submit.prevent="login" class="q-gutter-md">
+            <q-input
+              filled
+              v-model="username"
+              label="Email"
+              hint="Email"
+              lazy-rules
+              :rules="[ val => val && val.length > 0 || 'Please type something']"
+            />
+            <q-input
+              filled
+              type="password"
+              v-model="password"
+              label="Password"
+              hint="Password"
+              lazy-rules
+              :rules="[ val => val && val.length > 0 || 'Please type something']"
+            />
+            <div>
+              <q-btn v-if="!this.loading" label="INGRESAR" type="submit" color="primary"/>
+              <q-space />
+              <q-spinner
+                v-if="this.loading"
+                color="primary"
+                size="2em"
+                :thickness="10"
+              />
             </div>
-
-            <div class="form-control mb-more">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" class="login-input" v-model="password">
-            </div>
-
-            <div class="form-control">
+            <!-- <div class="form-control">
               <button type="submit" class="btn-submit">Login</button>
-            </div>
+              <q-spinner
+                v-if="this.loading"
+                color="primary"
+                size="2em"
+                :thickness="10"
+              />
+            </div> -->
 
-          </form>
+          </q-form>
         </div>
       </q-page>
     </q-page-container>
@@ -28,40 +50,24 @@
 
 </template>
 
-<!-- <form action="#" @submit.prevent="login">
-
-            <div class="form-control">
-              <label for="email">Username/Email</label>
-              <input type="email" name="username" id="username" class="login-input" v-model="username">
-            </div>
-
-            <div class="form-control mb-more">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" class="login-input" v-model="password">
-            </div>
-
-            <div class="form-control">
-              <button type="submit" class="btn-submit">Login</button>
-            </div>
-
-          </form>
--->
-
 <script>
 export default {
   name: 'Login',
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      loading: false
     }
   },
   methods: {
     login () {
+      this.loading = true
       this.$store.dispatch('reports/retrieveToken', {
         username: this.username,
         password: this.password
       }).then(response => {
+        this.loading = false
         this.$router.push('/')
       })
     }
@@ -72,8 +78,9 @@ export default {
 <style>
 .q-card {
   width: 360px;
+  background-color: #473f5d;
 }
 .bg-login{
-  background-color: #473f5d;
+  background-color: white;
 }
 </style>
