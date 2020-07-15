@@ -76,10 +76,6 @@ export default {
 </script>
 
 <style>
-.q-card {
-  width: 360px;
-  background-color: #473f5d;
-}
 .bg-login{
   background-color: white;
 }

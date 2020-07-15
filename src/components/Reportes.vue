@@ -7,30 +7,40 @@
       :columns="columns"
       row-key="name"
       :visible-columns="visibleColumns"
+      :loading="loading"
     >
       <template v-slot:top>
-        <div class="col-6 q-table__title">Recepciones por periodo</div>
-        <div class="col-3">
-          <q-datetime-picker mode="date" label="Desde" v-model="date"></q-datetime-picker>
+        <div class="q-pa-md">
+          <div class="row q-col-gutter-md">
+            <div class="col-12 q-table__title">Recepciones por periodo  <q-btn class=" float-right" round color="secondary" icon="search" /></div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
+              <q-datetime-picker mode="date" label="Desde" v-model="dateFrom"></q-datetime-picker>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
+              <q-datetime-picker mode="date" label="Hasta" v-model="dateTo"></q-datetime-picker>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <q-select
+                v-model="visibleColumns"
+                multiple
+                :disable="select_disable"
+                :dense="dense"
+                :options-dense="optionsdense"
+                :display-value="$q.lang.table.columns"
+                emit-value
+                map-options
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :options="columns"
+                option-value="name"
+                @filter="filterFn"
+              />
+            </div>
+             <!-- <div class="col-lg-1 col-md-3 gt-sm">
+              <q-btn round color="secondary" icon="search" />
+            </div> -->
+          </div>
         </div>
-        <div class="col-3">
-          <q-datetime-picker mode="date" label="Hasta" v-model="date"></q-datetime-picker>
-        </div>
-        <q-space />
-        <q-select
-          v-model="visibleColumns"
-          multiple
-          outlined
-          dense
-          options-dense
-          :display-value="$q.lang.table.columns"
-          emit-value
-          map-options
-          :options="columns"
-          option-value="name"
-          options-cover
-          style="min-width: 150px"
-        />
       </template>
 
     </q-table>
@@ -59,10 +69,15 @@ export default {
   },
   props: {},
   data: () => ({
-    date: '',
-    visibleColumns: ['calories', 'desc', 'protein', 'sodium', 'iron'],
+    dateFrom: '',
+    dateTo: '',
+    visibleColumns: [],
     columns: [],
-    data: []
+    data: [],
+    loading: true,
+    dense: false,
+    optionsdense: true,
+    select_disable: true
   }),
   created () {
     this.loadTableData()
@@ -79,34 +94,44 @@ export default {
         username: this.username,
         password: this.password
       }).then(response => {
-        // console.log(response)
-        // eslint-disable-next-line no-undef
         /* DATA */
         response.data.data.forEach((value, index) => {
           this.data.push(value)
-          console.log(value)
-          // console.log(index)
         })
+        this.loading = false
+        this.select_disable = false
+      })
+      this.loadTableRows()
+    },
+    loadTableRows () {
+      this.loading = true
+      this.$store.dispatch('reports/getTableData', {
+        username: this.username,
+        password: this.password
+      }).then(response => {
         /* COLUMNS */
         Object.keys(response.data.data[0]).forEach((value, index) => {
-          this.columns.push({ name: value, label: value, field: value, sortable: true })
+          this.columns.push({ name: value, align: 'left', label: value, field: value, sortable: true })
         })
-        /* { name: 'Calle', label: 'Calle', field: 'Calle', sortable: true }, */
-        // console.log(this.data)
-        /*
-        {
-          name: 'Frozen Yogurt',
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: '14%',
-          iron: '1%'
-        }
-        */
+        this.visibleColumns.push('tipo_Mov', 'Lote', 'fecha_cosecha', 'peso_neto', 'ESTADO')
         this.loading = false
-        // this.$router.push('/')
+      })
+    },
+    filterFn (val, update) {
+      if (val === '') {
+        update(() => {
+          this.options = this.columns
+
+          // with Quasar v1.7.4+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options = this.columns.filter(v => v.toLowerCase().indexOf(needle) > -1)
       })
     }
   }
