@@ -1,10 +1,18 @@
 /* eslint-disable handle-callback-err */
 import Axios from 'axios'
 // import { reject, resolve } from 'core-js/fn/promise'
+var baseUrl = null
+if (process.env.DEV) {
+  // eslint-disable-next-line no-unused-vars
+  baseUrl = 'http://localhost'
+} else {
+  // eslint-disable-next-line no-unused-vars
+  baseUrl = 'http://170.239.86.104:8000'
+}
 
 export function retrieveToken (context, credentials) {
   return new Promise((resolve, reject) => {
-    Axios.post('http://localhost:80/api/login', {
+    Axios.post(baseUrl + '/api/login', {
       username: credentials.username,
       password: credentials.password
     }).then(response => {
@@ -24,7 +32,7 @@ export function destroyToken (context) {
 
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.post('http://localhost:80/api/logout')
+      Axios.post(baseUrl + '/api/logout')
         .then(response => {
           localStorage.removeItem('access_token')
           context.commit('destroyToken')
@@ -43,7 +51,7 @@ export function getTableData (context, credentials) {
 
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.get('http://localhost/api/getResumenLote?page=1')
+      Axios.get(baseUrl + '/api/getResumenLote?page=1')
         .then(response => {
           resolve(response)
         }).catch(error => {
