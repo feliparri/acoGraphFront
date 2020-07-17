@@ -1,21 +1,15 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      style="height: 400px"
-      dense
       title="Treats"
       :data="data"
       :columns="columns"
-      row-key="name"
-      :visible-columns="visibleColumns"
+      row-key="id"
+      :pagination.sync="pagination"
       :loading="loading"
-      class="my-sticky-header-table"
-      virtual-scroll
-      :virtual-scroll-item-size="5"
-      :virtual-scroll-sticky-size-start="5"
-      :pagination="pagination"
-      :rows-per-page-options="[0]"
-      @virtual-scroll="onScroll"
+      :filter="filter"
+      @request="loadTableData"
+      binary-state-sort
     >
       <template v-slot:top>
         <div class="q-pa-md">
@@ -50,7 +44,6 @@
           </div>
         </div>
       </template>
-
     </q-table>
     <br>
     <div class="row q-col-gutter-lg">
@@ -86,27 +79,58 @@ export default {
     dense: false,
     optionsdense: true,
     select_disable: true,
-    pageSize: 5,
-    nextPage: 2,
-    lastPage: 3,
+    filter: '',
     pagination: {
-      rowsPerPAge: 5
+      sortBy: null,
+      descending: false,
+      page: 1,
+      rowsPerPage: 5,
+      rowsNumber: 10
     }
   }),
   created () {
-    this.loadTableData()
+    this.loadTableRows()
+  },
+  mounted () {
+    this.onRequest({
+      pagination: this.pagination,
+      filter: undefined
+    })
   },
   destroyed () {
   },
+  /* computed: {
+    pagesNumber () {
+      return 2
+    }
+  }, */
   methods: {
+    onRequest (props) {
+      // eslint-disable-next-line no-unused-vars
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      // eslint-disable-next-line no-unused-vars
+      const filter = props.filter
+
+      this.loading = true
+      this.loadTableData(props)
+    },
     dateOptionsB (date) {
       return date >= '2019/02/03' && date <= '2020/12/15'
     },
-    loadTableData () {
+    loadTableData (props) {
+      console.log(props)
+      this.data = []
+      console.log(props)
+      // eslint-disable-next-line no-unused-vars
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      // eslint-disable-next-line no-unused-vars
+      const filter = props.filter
       this.loading = true
       this.$store.dispatch('reports/getTableData', {
-        username: this.username,
-        password: this.password
+        page,
+        rowsPerPage,
+        sortBy,
+        descending
       }).then(response => {
         /* DATA */
         response.data.data.forEach((value, index) => {
@@ -114,8 +138,12 @@ export default {
         })
         this.loading = false
         this.select_disable = false
+        this.pagination.sortBy = sortBy
+        this.pagination.descending = !this.pagination.descending
+        this.pagination.page = response.data.current_page
+        this.pagination.rowsPerPage = response.data.per_page
+        this.pagination.rowsNumber = response.data.total
       })
-      this.loadTableRows()
     },
     loadTableRows () {
       this.loading = true
@@ -129,6 +157,8 @@ export default {
         })
         this.visibleColumns.push('tipo_Mov', 'Lote', 'fecha_cosecha', 'peso_neto', 'ESTADO')
         this.loading = false
+        // this.prevPage = response.data.
+        // this.nextPage =
       })
     },
     filterFn (val, update) {
@@ -150,7 +180,7 @@ export default {
     },
     onScroll ({ to, ref }) {
       console.log('scroll')
-      const lastIndex = this.data.length - 1
+      /* const lastIndex = this.data.length - 1
 
       if (this.loading !== true && this.nextPage < this.lastPage && to === lastIndex) {
         this.loading = true
@@ -162,7 +192,7 @@ export default {
             this.loading = false
           })
         }, 500)
-      }
+      } */
     }
   }
 }

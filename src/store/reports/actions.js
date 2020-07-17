@@ -46,12 +46,12 @@ export function destroyToken (context) {
   }
 }
 
-export function getTableData (context, credentials) {
+export function getTableData (context, props) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
-
+  console.log(props)
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.get(baseUrl + '/api/getResumenLote?page=1')
+      Axios.post(baseUrl + '/api/getResumenLote?page=1', props)
         .then(response => {
           resolve(response)
         }).catch(error => {
