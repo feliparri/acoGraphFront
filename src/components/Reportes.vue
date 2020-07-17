@@ -1,6 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
+      style="height: 400px"
       dense
       title="Treats"
       :data="data"
@@ -8,6 +9,13 @@
       row-key="name"
       :visible-columns="visibleColumns"
       :loading="loading"
+      class="my-sticky-header-table"
+      virtual-scroll
+      :virtual-scroll-item-size="5"
+      :virtual-scroll-sticky-size-start="5"
+      :pagination="pagination"
+      :rows-per-page-options="[0]"
+      @virtual-scroll="onScroll"
     >
       <template v-slot:top>
         <div class="q-pa-md">
@@ -77,7 +85,13 @@ export default {
     loading: true,
     dense: false,
     optionsdense: true,
-    select_disable: true
+    select_disable: true,
+    pageSize: 5,
+    nextPage: 2,
+    lastPage: 3,
+    pagination: {
+      rowsPerPAge: 5
+    }
   }),
   created () {
     this.loadTableData()
@@ -133,6 +147,22 @@ export default {
         const needle = val.toLowerCase()
         this.options = this.columns.filter(v => v.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    onScroll ({ to, ref }) {
+      console.log('scroll')
+      const lastIndex = this.data.length - 1
+
+      if (this.loading !== true && this.nextPage < this.lastPage && to === lastIndex) {
+        this.loading = true
+
+        setTimeout(() => {
+          this.nextPage++
+          this.$nextTick(() => {
+            ref.refresh()
+            this.loading = false
+          })
+        }, 500)
+      }
     }
   }
 }
