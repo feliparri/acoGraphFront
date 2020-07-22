@@ -50,10 +50,13 @@
     <br>
     <div class="row q-col-gutter-lg">
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecepcion></dashRecepcion>
+        <DashProdByPesoMes></DashProdByPesoMes>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashProduccion></dashProduccion>
+        <dashProdByVariedad></dashProdByVariedad>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <dashProdByTipo></dashProdByTipo>
       </div>
     </div>
   </div>
@@ -61,16 +64,18 @@
 
 <script type="text/babel">
 // import IEcharts from 'vue-echarts-v3/src/full.js'
-import dashRecepcion from '../components/dashRecepcion.vue'
-import dashProduccion from '../components/dashProduccion.vue'
+import DashProdByPesoMes from '../components/DashProdByPesoMes.vue'
+import dashProdByVariedad from '../components/dashProdByVariedad.vue'
+import dashProdByTipo from '../components/dashProdByTipo.vue'
 import { date } from 'quasar'
 
 export default {
   name: 'reportes',
   components: {
     // IEcharts
-    dashRecepcion,
-    dashProduccion
+    DashProdByPesoMes,
+    dashProdByVariedad,
+    dashProdByTipo
   },
   props: {},
   data: () => ({

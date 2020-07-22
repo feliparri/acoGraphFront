@@ -2,22 +2,27 @@
   <div class="q-pa-md">
     <div class="row q-col-gutter-lg">
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecepcion></dashRecepcion>
+        <DashProdByPesoMes></DashProdByPesoMes>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashProduccion></dashProduccion>
+        <dashProdByTipo></dashProdByTipo>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <dashProdByVariedad></dashProdByVariedad>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import dashRecepcion from '../components/dashRecepcion.vue'
-import dashProduccion from '../components/dashProduccion.vue'
+import DashProdByPesoMes from '../components/DashProdByPesoMes.vue'
+import dashProdByTipo from '../components/dashProdByTipo.vue'
+import dashProdByVariedad from '../components/dashProdByVariedad.vue'
 export default {
   components: {
-    dashProduccion,
-    dashRecepcion
+    dashProdByTipo,
+    dashProdByVariedad,
+    DashProdByPesoMes
   }
 }
 </script>
