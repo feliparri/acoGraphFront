@@ -1,39 +1,24 @@
 <template>
   <div class="q-pa-md dash-card">
     <div class="row items-center">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="row q-col-gutter-none">
-          <div class="col-12">
+          <div class="col-10">
             <div class="my-content">
               <div class="text-h6">Resumen Produccion</div>
-              <div class="text-subtitle2">Rinconada</div>
+              <div class="text-subtitle2">Produccion por Variedad </div>
             </div>
           </div>
-        </div>
-      </div>
-      <q-separator inset />
-      <br>
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 text-center">
-        <div class="row q-col-gutter-none">
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            <div style="color:#846461;" class="text-h7">Salida Total</div>
-            <div style="color:#846461;" class="text-subtitle2">$40.000.000</div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            <div style="color:#846461;" class="text-h7">Ultima Salida</div>
-            <div style="color:#846461;" class="text-subtitle2">$6.000.000</div>
+          <div class="col-2">
+            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByCodVariedad"/>
           </div>
         </div>
       </div>
-      <q-separator class="lt-md" inset />
-      <br><br>
-
-      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="echarts">
           <IEcharts :resizable="true" :option="pie" :loading="loading" @ready="onReady" @click="onClick" />
           <!--<button class="btnRandom" @click="doRandom">Random</button>-->
         </div>
-        <q-btn flat round dense icon="plus" />
       </div>
     </div>
   </div>
@@ -42,14 +27,14 @@
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
 export default {
-  name: 'dashRecepcion',
+  name: 'dashProdByVariedad',
   components: {
     IEcharts
   },
   props: {},
   data: () => ({
     layout: 'comfortable',
-    side: 'right',
+    side: 'left',
     loading: false,
     pie: {
       /* tooltip: {},
@@ -65,26 +50,46 @@ export default {
       },
       yAxis: {}, */
       title: {
-        text: 'PROD. X CALIBRE',
-        x: 'center',
+        text: '',
+        x: 'left',
         textStyle: { fontSize: '11' }
       },
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)'
+        // formatter: '{a} <br/>{b} : {c} ({d}%)'
+        formatter: '{b} <br/>{c} ({d}%)'
+      },
+      legend: {
+        type: 'scroll',
+        orient: 'vertical',
+        right: 10,
+        top: 20,
+        bottom: 20,
+        data: []
+
+        // selected: data.selected
       },
       series: [
         {
-          name: 'Sales',
+          avoidLabelOverlap: false,
+          label: {
+            show: false,
+            position: 'left'
+          },
+          radius: ['30%', '70%'],
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: '10',
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          name: 'PR X ESP',
           type: 'pie',
-          data: [
-            // 5, 20, 36, 10, 10, 20
-            { value: 335, name: '直接访问' },
-            { value: 310, name: '邮件营销' },
-            { value: 234, name: '联盟广告' },
-            { value: 135, name: '视频广告' },
-            { value: 1548, name: '搜索引擎' }
-          ]
+          data: []
         }
       ]
     }
@@ -95,11 +100,19 @@ export default {
   destroyed () {
     window.removeEventListener('resize', this.myEventHandler)
   },
+  mounted () {
+    this.loadPieChartDataByCodVariedad()
+  },
   methods: {
-    myEventHandler (e) {
-    // your code for handling resize...
-      console.log(e)
-      // this.doRandom()
+    loadPieChartDataByCodVariedad () {
+      this.$store.dispatch('reports/getPieChartDataByCodVariedad').then(response => {
+        /* DATA */
+        this.pie.series[0].data = []
+        response.data.forEach((value, index) => {
+          this.pie.series[0].data.push({ value: value.count, name: value.cod_variedad })
+          this.pie.legend.data.push(value.cod_variedad)
+        })
+      })
     },
     doRandom () {
       const that = this
@@ -111,10 +124,10 @@ export default {
       that.pie.series[0].data = data
     },
     onReady (instance, ECharts) {
-      console.log(instance, ECharts)
+      // console.log(instance, ECharts)
     },
     onClick (event, instance, ECharts) {
-      console.log(arguments)
+      // console.log(arguments)
     }
   }
 }

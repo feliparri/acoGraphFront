@@ -15,7 +15,8 @@
     "core-js": "^3.6.5",
     "echarts": "^4.8.0",
     "quasar": "^1.0.0",
-    "vue-echarts-v3": "^2.0.1"
+    "vue-echarts-v3": "^2.0.1",
+    "vue-i18n": "^8.18.2"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

@@ -1,23 +1,27 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      dense
       title="Treats"
       :data="data"
       :columns="columns"
-      row-key="name"
-      :visible-columns="visibleColumns"
+      row-key="id"
+      :pagination.sync="pagination"
       :loading="loading"
+      :filter="filter"
+      @request="loadTableData"
+      binary-state-sort
+      :visible-columns="visibleColumns"
+      dense
     >
       <template v-slot:top>
         <div class="q-pa-md">
           <div class="row q-col-gutter-md">
-            <div class="col-12 q-table__title">Recepciones por periodo  <q-btn class=" float-right" round color="secondary" icon="search" /></div>
+            <div class="col-12 q-table__title">Recepciones por periodo  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
-              <q-datetime-picker mode="date" label="Desde" v-model="dateFrom"></q-datetime-picker>
+              <q-datetime-picker clearable auto-update-value mode="date" label="Desde" v-model="dateFrom" ></q-datetime-picker >
             </div>
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" >
-              <q-datetime-picker mode="date" label="Hasta" v-model="dateTo"></q-datetime-picker>
+              <q-datetime-picker clearable auto-update-value mode="date" label="Hasta" v-model="dateTo" ></q-datetime-picker >
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
               <q-select
@@ -42,15 +46,17 @@
           </div>
         </div>
       </template>
-
     </q-table>
     <br>
     <div class="row q-col-gutter-lg">
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecepcion></dashRecepcion>
+        <DashProdByPesoMes></DashProdByPesoMes>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashProduccion></dashProduccion>
+        <dashProdByVariedad></dashProdByVariedad>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-6">
+        <dashProdByTipo></dashProdByTipo>
       </div>
     </div>
   </div>
@@ -58,14 +64,18 @@
 
 <script type="text/babel">
 // import IEcharts from 'vue-echarts-v3/src/full.js'
-import dashRecepcion from '../components/dashRecepcion.vue'
-import dashProduccion from '../components/dashProduccion.vue'
+import DashProdByPesoMes from '../components/DashProdByPesoMes.vue'
+import dashProdByVariedad from '../components/dashProdByVariedad.vue'
+import dashProdByTipo from '../components/dashProdByTipo.vue'
+import { date } from 'quasar'
+
 export default {
   name: 'reportes',
   components: {
     // IEcharts
-    dashRecepcion,
-    dashProduccion
+    DashProdByPesoMes,
+    dashProdByVariedad,
+    dashProdByTipo
   },
   props: {},
   data: () => ({
@@ -77,22 +87,66 @@ export default {
     loading: true,
     dense: false,
     optionsdense: true,
-    select_disable: true
+    select_disable: true,
+    filter: '',
+    pagination: {
+      sortBy: null,
+      descending: false,
+      page: 1,
+      rowsPerPage: 5,
+      rowsNumber: 10
+    }
   }),
   created () {
-    this.loadTableData()
+    this.loadTableRows()
+  },
+  mounted () {
+    this.onRequest({
+      pagination: this.pagination,
+      filter: undefined
+    })
   },
   destroyed () {
   },
+  /* computed: {
+    pagesNumber () {
+      return 2
+    }
+  }, */
   methods: {
-    dateOptionsB (date) {
-      return date >= '2019/02/03' && date <= '2020/12/15'
+    searchFilter () {
+      this.onRequest({
+        pagination: this.pagination,
+        filter: undefined
+      })
     },
-    loadTableData () {
+    onRequest (props) {
+      // eslint-disable-next-line no-unused-vars
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      // eslint-disable-next-line no-unused-vars
+      const filter = props.filter
+      console.log(filter)
+      this.loading = true
+      this.loadTableData(props)
+    },
+    loadTableData (props) {
+      console.log(props)
+      var df = new Date(this.dateFrom)
+      var dt = new Date(this.dateTo)
+      var dateFrom = date.formatDate(df, 'YYYY-MM-DD')
+      var dateTo = date.formatDate(dt, 'YYYY-MM-DD')
+      var filter = { from: dateFrom, to: dateTo }
+      this.data = []
+      // eslint-disable-next-line no-unused-vars
+      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      // eslint-disable-next-line no-unused-vars
       this.loading = true
       this.$store.dispatch('reports/getTableData', {
-        username: this.username,
-        password: this.password
+        page,
+        rowsPerPage,
+        sortBy,
+        descending,
+        filter
       }).then(response => {
         /* DATA */
         response.data.data.forEach((value, index) => {
@@ -100,8 +154,12 @@ export default {
         })
         this.loading = false
         this.select_disable = false
+        this.pagination.sortBy = sortBy
+        // this.pagination.descending = this.pagination.descending
+        this.pagination.page = response.data.current_page
+        this.pagination.rowsPerPage = response.data.per_page
+        this.pagination.rowsNumber = response.data.total
       })
-      this.loadTableRows()
     },
     loadTableRows () {
       this.loading = true
@@ -118,8 +176,10 @@ export default {
       })
     },
     filterFn (val, update) {
+      // console.log(val === '')
       if (val === '') {
         update(() => {
+          console.log(update)
           this.options = this.columns
 
           // with Quasar v1.7.4+

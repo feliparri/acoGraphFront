@@ -1,19 +1,20 @@
 <template>
   <div class="q-pa-md dash-card">
     <div class="row items-center">
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="row q-col-gutter-none">
-          <div class="col-12">
+          <div class="col-10">
             <div class="my-content">
               <div class="text-h6">Resumen Produccion</div>
-              <div class="text-subtitle2">Rinconada</div>
+              <div class="text-subtitle2">Peso prod x Mes</div>
             </div>
+          </div>
+          <div class="col-2">
+            <q-btn class="float-right" flat round dense icon="update" @click="getPieChartDataByPesoMes"/>
           </div>
         </div>
       </div>
-      <q-separator inset />
-      <br>
-      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 text-center">
+      <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5 text-center">
         <div class="row q-col-gutter-none">
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <div style="color:#846461;" class="text-h7">Salida Total</div>
@@ -27,13 +28,17 @@
       </div>
       <q-separator class="lt-md" inset />
       <br><br>
-
-      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-5">
+      -->
+      <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
         <div class="echarts">
           <IEcharts :resizable="true" :option="bar" :loading="loading" @ready="onReady" @click="onClick" />
           <!--<button class="btnRandom" @click="doRandom">Random</button>-->
         </div>
-        <q-btn flat round dense icon="plus" />
+        <q-btn flat round dense icon="plus" @click="doRandom"/>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1">
       </div>
     </div>
   </div>
@@ -42,7 +47,7 @@
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
 export default {
-  name: 'dashRecepcion',
+  name: 'DashProdByPesoMes',
   components: {
     IEcharts
   },
@@ -57,21 +62,30 @@ export default {
       },
       tooltip: {},
       xAxis: {
-        data: [
-          'Shirt',
-          'Sweater',
-          'Chiffon Shirt',
-          'Pants',
-          'High Heels',
-          'Socks'
-        ]
+        type: 'category',
+        data: [],
+        axisTick: {
+          alignWithLabel: true
+        }
       },
-      yAxis: {},
+      grid: {
+        left: '80px',
+        right: '15px'
+      },
+      yAxis: {
+        type: 'value',
+        data: []
+      },
       series: [
         {
-          name: 'Sales',
+          name: '',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
+          showBackground: true,
+          barWidth: '40%',
+          backgroundStyle: {
+            color: 'rgba(220, 220, 220, 0.8)'
+          },
+          data: []
         }
       ]
     }
@@ -82,7 +96,22 @@ export default {
   destroyed () {
     window.removeEventListener('resize', this.myEventHandler)
   },
+  mounted () {
+    this.getPieChartDataByPesoMes()
+  },
   methods: {
+    getPieChartDataByPesoMes () {
+      this.$store.dispatch('reports/getPieChartDataByPesoMes').then(response => {
+        /* DATA */
+        this.bar.series[0].data = []
+        this.bar.xAxis.data = []
+        response.data.forEach((value, index) => {
+          this.bar.series[0].data.push(value.peso)
+          this.bar.xAxis.data.push(value.mes)
+        })
+      })
+      console.log()
+    },
     myEventHandler (e) {
     // your code for handling resize...
       console.log(e)
