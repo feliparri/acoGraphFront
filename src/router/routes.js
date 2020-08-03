@@ -3,6 +3,7 @@ import Layout from 'layouts/Layout'
 // import Index from 'pages/Index'
 import Dashboard from 'pages/Dashboard'
 import Reportes from 'pages/Reportes'
+import Consolidados from 'pages/Consolidados'
 import Login from 'components/auth/login'
 import Logout from 'components/auth/logout'
 // import Store from '../store'
@@ -17,7 +18,8 @@ const routes = [
     children: [
       // { path: '/dashboard', name: 'index', component: Index },
       { path: '/dashboard/', name: 'dashboard', component: Dashboard },
-      { path: '/reportes/', name: 'reportes', component: Reportes }
+      { path: '/reportes/', name: 'reportes', component: Reportes },
+      { path: '/consolidados/', name: 'consolidados', component: Consolidados }
     ]
   },
   {

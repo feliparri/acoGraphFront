@@ -5,12 +5,12 @@
         <div class="row q-col-gutter-none">
           <div class="col-10">
             <div class="my-content">
-              <div class="text-h6">Resumen Produccion</div>
-              <div class="text-subtitle2">Produccion por Variedad </div>
+              <div class="text-h6">Resumen RECEPCION</div>
+              <div class="text-subtitle2">RECEPCION POR TIPO </div>
             </div>
           </div>
           <div class="col-2">
-            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByCodVariedad"/>
+            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByTipoFruta"/>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
 export default {
-  name: 'dashProdByVariedad',
+  name: 'dashProdByTipo',
   components: {
     IEcharts
   },
@@ -101,27 +101,18 @@ export default {
     window.removeEventListener('resize', this.myEventHandler)
   },
   mounted () {
-    this.loadPieChartDataByCodVariedad()
+    this.loadPieChartDataByTipoFruta()
   },
   methods: {
-    loadPieChartDataByCodVariedad () {
-      this.$store.dispatch('reports/getPieChartDataByCodVariedad').then(response => {
+    loadPieChartDataByTipoFruta () {
+      this.$store.dispatch('reports/getPieChartData').then(response => {
         /* DATA */
         this.pie.series[0].data = []
         response.data.forEach((value, index) => {
-          this.pie.series[0].data.push({ value: value.count, name: value.cod_variedad })
-          this.pie.legend.data.push(value.cod_variedad)
+          this.pie.series[0].data.push({ value: value.sum, name: value.especie })
+          this.pie.legend.data.push(value.especie)
         })
       })
-    },
-    doRandom () {
-      const that = this
-      const data = []
-      for (let i = 0, min = 5, max = 99; i < 6; i++) {
-        data.push(Math.floor(Math.random() * (max + 1 - min) + min))
-      }
-      that.loading = !that.loading
-      that.pie.series[0].data = data
     },
     onReady (instance, ECharts) {
       // console.log(instance, ECharts)
