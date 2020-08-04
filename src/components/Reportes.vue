@@ -80,10 +80,10 @@
           <DashRecByPesoMes ref="dashPeso"></DashRecByPesoMes>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByVariedad></dashRecByVariedad>
+          <dashRecByVariedad ref="dashVariedadRec"></dashRecByVariedad>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByTipo></dashRecByTipo>
+          <dashRecByTipo ref="dashVariedadInv"></dashRecByTipo>
         </div>
       </div>
     </div>
@@ -160,9 +160,10 @@ export default {
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
       console.log(filterOne, filterTwo, dateFrom, dateTo)
-      this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {
-        this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
-      })
+      this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {})
+      this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars

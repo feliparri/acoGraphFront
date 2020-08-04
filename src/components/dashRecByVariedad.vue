@@ -6,7 +6,7 @@
           <div class="col-10">
             <div class="my-content">
               <div class="text-h6">Resumen RECEPCION</div>
-              <div class="text-subtitle2">RECEPCION por Variedad </div>
+              <div class="text-subtitle2">Kilos x Variedad en Recepcion</div>
             </div>
           </div>
           <div class="col-2">
@@ -26,6 +26,8 @@
 
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
+import { date } from 'quasar'
+
 export default {
   name: 'dashProdByVariedad',
   components: {
@@ -35,20 +37,8 @@ export default {
   data: () => ({
     layout: 'comfortable',
     side: 'left',
-    loading: false,
+    loading: true,
     pie: {
-      /* tooltip: {},
-      xAxis: {
-        data: [
-          'Shirt',
-          'Sweater',
-          'Chiffon Shirt',
-          'Pants',
-          'High Heels',
-          'Socks'
-        ]
-      },
-      yAxis: {}, */
       title: {
         text: '',
         x: 'left',
@@ -61,10 +51,10 @@ export default {
       },
       legend: {
         type: 'scroll',
-        orient: 'vertical',
-        right: 10,
-        top: 20,
-        bottom: 20,
+        orient: 'horizontal',
+        right: 0,
+        top: 0,
+        bottom: 40,
         data: []
 
         // selected: data.selected
@@ -95,24 +85,32 @@ export default {
     }
   }),
   created () {
+    this.loadPieChartDataByCodVariedad()
     window.addEventListener('resize', this.myEventHandler)
   },
   destroyed () {
     window.removeEventListener('resize', this.myEventHandler)
   },
   mounted () {
-    this.loadPieChartDataByCodVariedad()
+    console.log('mounted')
   },
   methods: {
-    loadPieChartDataByCodVariedad () {
-      this.$store.dispatch('reports/getPieChartDataByCodVariedad').then(response => {
+    loadPieChartDataByCodVariedad (dateFrom, dateTo, filterOne, filterTwo) {
+      this.loading = true
+      const dFrom = new Date(dateFrom)
+      const from = date.formatDate(dFrom, 'YYYY-MM-DD')
+      const dTo = new Date(dateTo)
+      const to = date.formatDate(dTo, 'YYYY-MM-DD')
+      this.$store.dispatch('reports/getPieChartDataByCodVariedad', { from, to, filterOne, filterTwo }).then(response => {
+        console.log(response)
         /* DATA */
         this.pie.series[0].data = []
         response.data.forEach((value, index) => {
-          this.pie.series[0].data.push({ value: value.count, name: value.cod_variedad })
-          this.pie.legend.data.push(value.cod_variedad)
+          this.pie.series[0].data.push({ value: value.KILOS_RECEPCIONADOS, name: value.VARIEDAD })
+          this.pie.legend.data.push(value.VARIEDAD)
         })
       })
+      this.loading = false
     },
     doRandom () {
       const that = this

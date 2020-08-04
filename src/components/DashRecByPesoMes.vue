@@ -6,7 +6,7 @@
           <div class="col-10">
             <div class="my-content">
               <div class="text-h6">Resumen RECEPCION</div>
-              <div class="text-subtitle2">KILOS RECEPCIONADOS</div>
+              <div class="text-subtitle2">Kilos Recepcionados</div>
             </div>
           </div>
           <div class="col-2">

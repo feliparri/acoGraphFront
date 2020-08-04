@@ -67,7 +67,7 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Home',
+          title: 'Dashboard',
           caption: '',
           icon: 'fiber_manual_record',
           link: '/dashboard',

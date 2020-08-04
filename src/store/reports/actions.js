@@ -27,6 +27,22 @@ export function retrieveToken (context, credentials) {
   })
 }
 
+export function getUserData (context) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.get(baseUrl + '/api/user')
+        .then(response => {
+          localStorage.setItem('name', response.data.name)
+          localStorage.setItem('email', response.data.email)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
 export function destroyToken (context) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
 
@@ -75,10 +91,26 @@ export function getPieChartData (context, props) {
 }
 
 export function getPieChartDataByCodVariedad (context, props) {
+  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByCodVariedad', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getPieChartDataByCodVariedadInv (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadInv', props)
         .then(response => {
           resolve(response)
         }).catch(error => {
