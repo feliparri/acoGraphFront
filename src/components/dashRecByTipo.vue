@@ -16,7 +16,7 @@
       </div>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="echarts">
-          <IEcharts :resizable="true" :option="pie" :loading="loading" @ready="onReady" @click="onClick" />
+          <IEcharts :resizable="true" :option="pie" :loading="chartLoading" @ready="onReady" @click="onClick" />
           <!--<button class="btnRandom" @click="doRandom">Random</button>-->
         </div>
       </div>
@@ -37,7 +37,7 @@ export default {
   data: () => ({
     layout: 'comfortable',
     side: 'left',
-    loading: true,
+    // loading: true,
     pie: {
       title: {
         text: '',
@@ -46,8 +46,9 @@ export default {
       },
       tooltip: {
         trigger: 'item',
-        // formatter: '{a} <br/>{b} : {c} ({d}%)'
-        formatter: '{b} <br/>{c} ({d}%)'
+        formatter: function (params) {
+          return '<b>' + params.name + '</b>' + ' <br/>' + Math.round(params.value).toLocaleString('es') + ' Kg.' + '(' + params.percent + '%)'
+        }
       },
       legend: {
         type: 'scroll',
@@ -84,6 +85,11 @@ export default {
       ]
     }
   }),
+  computed: {
+    chartLoading: function () {
+      return this.$store.state.reports.chartLoading
+    }
+  },
   created () {
     this.loadPieChartDataByCodVariedadInv()
     window.addEventListener('resize', this.myEventHandler)
@@ -92,25 +98,23 @@ export default {
     window.removeEventListener('resize', this.myEventHandler)
   },
   mounted () {
-    console.log('mounted')
   },
   methods: {
     loadPieChartDataByCodVariedadInv (dateFrom, dateTo, filterOne, filterTwo) {
-      this.loading = true
+      // this.loading = true
       const dFrom = new Date(dateFrom)
       const from = date.formatDate(dFrom, 'YYYY-MM-DD')
       const dTo = new Date(dateTo)
       const to = date.formatDate(dTo, 'YYYY-MM-DD')
       this.$store.dispatch('reports/getPieChartDataByCodVariedadInv', { from, to, filterOne, filterTwo }).then(response => {
-        console.log(response)
         /* DATA */
         this.pie.series[0].data = []
         response.data.forEach((value, index) => {
           this.pie.series[0].data.push({ value: value.KILOS_INVENTARIO, name: value.VARIEDAD })
           this.pie.legend.data.push(value.VARIEDAD)
         })
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
       })
-      this.loading = false
     },
     doRandom () {
       const that = this
@@ -122,10 +126,9 @@ export default {
       that.pie.series[0].data = data
     },
     onReady (instance, ECharts) {
-      // console.log(instance, ECharts)
     },
     onClick (event, instance, ECharts) {
-      // console.log(arguments)
+
     }
   }
 }

@@ -18,7 +18,7 @@
       </div>
       <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
         <div class="echarts">
-          <IEcharts :resizable="true" :option="bar" :loading="loading" @ready="onReady" @click="onClick" />
+          <IEcharts :resizable="true" :option="bar" :loading="chartLoading" @ready="onReady" @click="onClick" />
           <!--<button class="btnRandom" @click="doRandom">Random</button>-->
         </div>
         <q-btn flat round dense icon="plus" @click="doRandom"/>
@@ -42,12 +42,16 @@ export default {
   data: () => ({
     layout: 'comfortable',
     side: 'right',
-    loading: true,
+    // loading: true,
     bar: {
     }
   }),
+  computed: {
+    chartLoading: function () {
+      return this.$store.state.reports.chartLoading
+    }
+  },
   created () {
-    console.log('created')
     this.getPieChartDataByPesoMes()
     this.setProductores()
     this.setVariedad()
@@ -57,17 +61,17 @@ export default {
     window.removeEventListener('resize', this.myEventHandler)
   },
   mounted () {
-    console.log('mounted')
+
   },
   methods: {
     setProductores () {
-      this.$store.dispatch('reports/setProductor').then(response => { console.log(response) })
+      this.$store.dispatch('reports/setProductor').then(response => {})
     },
     setVariedad () {
-      this.$store.dispatch('reports/setVariedad').then(response => { console.log(response) })
+      this.$store.dispatch('reports/setVariedad').then(response => {})
     },
     getPieChartDataByPesoMes (dateFrom, dateTo, filterOne, filterTwo) {
-      this.loading = true
+      // this.loading = true
       const dFrom = new Date(dateFrom)
       const from = date.formatDate(dFrom, 'YYYY-MM-DD')
       const dTo = new Date(dateTo)
@@ -78,7 +82,6 @@ export default {
         const productor = []
         const xAxisData = []
         response.data.forEach((value, index) => {
-          console.log(this.$store.state.reports.filtrarPor.filterTwo === 'todo')
           if (this.$store.state.reports.filtrarPor.filterTwo === 'todo') {
             ArrProductor.push({
               KILOS_INVENTARIO: value.KILOS_INVENTARIO,
@@ -91,25 +94,20 @@ export default {
               KILOS_RECEPCIONADOS: value.KILOS_RECEPCIONADOS,
               PRODUCTOR: this.$options.filters.shortName(value.PRODUCTOR)
             })
-            /* console.log(this.$store.state.reports.filtrarPor.filterTwo)
-            if (this.$store.state.reports.filtrarPor.filterTwo === this.$options.filters.shortName(value.PRODUCTOR)) {
-              ArrProductor.push({
-                KILOS_INVENTARIO: value.KILOS_INVENTARIO,
-                KILOS_RECEPCIONADOS: value.KILOS_RECEPCIONADOS,
-                PRODUCTOR: this.$options.filters.shortName(value.PRODUCTOR)
-              })
-            } */
           }
         })
-        console.log(ArrProductor)
+
         ArrProductor.forEach((value, index) => {
           productor.push(value)
           xAxisData.push(value.PRODUCTOR)
-          console.log(value)
         })
         this.bar = {
           legend: {},
-          tooltip: {},
+          tooltip: {
+            formatter: function (params) {
+              return '<b>' + params.name + '</b>' + ' <br/>' + params.seriesName + ' <br/>' + Math.round(params.value[params.seriesName]).toLocaleString('es') + ' Kg.'
+            }
+          },
           dataset: {
             dimensions: dimensiones,
             source: productor
@@ -121,12 +119,12 @@ export default {
             { type: 'bar' }
           ]
         }
-        this.loading = false
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
       })
     },
     myEventHandler (e) {
     // your code for handling resize...
-      console.log(e)
+
       // this.doRandom()
     },
     doRandom () {
@@ -139,17 +137,16 @@ export default {
       that.bar.series[0].data = data
     },
     onReady (instance, ECharts) {
-      console.log(instance, ECharts)
     },
     onClick (event, instance, ECharts) {
-      console.log(arguments)
+
     }
   },
   filters: {
     shortName: function (texto) {
       var spltext = texto.split('-')
       var txt = spltext[1].substring(0, 15).trim()
-      return txt.substring(0, 10)
+      return txt.substring(0, 15)
     }
   }
 }

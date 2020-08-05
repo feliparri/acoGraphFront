@@ -153,6 +153,11 @@ export function setFiltrarPor (context, props) {
   context.commit('setFiltrarPor', props)
 }
 
+export function setChartLoading (context, props) {
+  console.log(props)
+  context.commit('setChartLoading', props)
+}
+
 export function setProductor (context, props) {
   // context.commit('setProductor', props.xAxisData)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token

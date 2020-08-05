@@ -6,6 +6,7 @@ export default function () {
     productores: [],
     variedades: [],
     filtro: [],
-    filtrarPor: { filterTwo: 'todo' }
+    filtrarPor: { filterTwo: 'todo' },
+    chartLoading: true
   }
 }

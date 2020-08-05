@@ -18,11 +18,15 @@ export const setProductor = (state, productores) => {
 const shortName = (texto) => {
   var spltext = texto.split('-')
   var txt = spltext[1].substring(0, 15).trim()
-  return txt.substring(0, 10)
+  return txt.substring(0, 15)
 }
 
 export const setVariedad = (state, variedades) => {
   state.variedades = variedades
+}
+
+export const setChartLoading = (state, chartLoading) => {
+  state.chartLoading = chartLoading.loading
 }
 
 export const setActiveFilter = (state, filtro) => {

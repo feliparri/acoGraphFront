@@ -173,6 +173,7 @@ export default {
       console.log(filter)
       this.loading = true
       this.loadTableData(props)
+      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
     },
     loadTableData (props) {
       var df = new Date(this.dateFrom)
