@@ -1,13 +1,9 @@
-
 import Layout from 'layouts/Layout'
-// import Index from 'pages/Index'
 import Dashboard from 'pages/Dashboard'
-import Reportes from 'pages/Reportes'
-import Consolidados from 'pages/Consolidados'
+import Recepcion from 'pages/Recepcion'
+import Procesos from 'pages/Procesos'
 import Login from 'components/auth/login'
 import Logout from 'components/auth/logout'
-// import Store from '../store'
-// import router from '.'
 
 const routes = [
   {
@@ -16,10 +12,9 @@ const routes = [
     component: Layout,
     meta: { requiresAuth: true },
     children: [
-      // { path: '/dashboard', name: 'index', component: Index },
       { path: '/dashboard/', name: 'dashboard', component: Dashboard },
-      { path: '/reportes/', name: 'reportes', component: Reportes },
-      { path: '/consolidados/', name: 'consolidados', component: Consolidados }
+      { path: '/recepcion/', name: 'recepcion', component: Recepcion },
+      { path: '/procesos/', name: 'procesos', component: Procesos }
     ]
   },
   {

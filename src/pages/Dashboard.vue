@@ -5,23 +5,23 @@
         <DashRecByPesoMes></DashRecByPesoMes>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecByTipo></dashRecByTipo>
+        <dashRecByVariedadRec></dashRecByVariedadRec>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-6">
-        <dashRecByVariedad></dashRecByVariedad>
+        <dashRecByVariedadInv></dashRecByVariedadInv>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import DashRecByPesoMes from '../components/DashRecByPesoMes.vue'
-import dashRecByTipo from '../components/dashRecByTipo.vue'
-import dashRecByVariedad from '../components/dashRecByVariedad.vue'
+import DashRecByPesoMes from '../components/recepcion/DashRecByPesoMes.vue'
+import dashRecByVariedadRec from '../components/recepcion/dashRecByVariedadRec.vue'
+import dashRecByVariedadInv from '../components/recepcion/dashRecByVariedadInv.vue'
 export default {
   components: {
-    dashRecByTipo,
-    dashRecByVariedad,
+    dashRecByVariedadRec,
+    dashRecByVariedadInv,
     DashRecByPesoMes
   }
 }

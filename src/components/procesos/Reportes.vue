@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col q-gutter-lg">
         <div class="row q-col-gutter-md">
-          <div class="col-12 q-table__title">Recepciones por periodo  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
+          <div class="col-12 q-table__title">Proceso por periodo  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
             <q-datetime-picker clearable auto-update-value mode="date" label="Desde" v-model="dateFrom" ></q-datetime-picker >
           </div>
@@ -76,15 +76,15 @@
       </q-table>
       <br>
       <div class="row q-col-gutter-lg">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-          <DashRecByPesoMes ref="dashPeso"></DashRecByPesoMes>
+        <!-- <div class="col-xs-12 col-sm-12 col-md-12">
+          <DashProcByPesoMes ref="dashPeso"></DashProcByPesoMes>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByVariedad ref="dashVariedadRec"></dashRecByVariedad>
+          <dashProcByVariedadRec ref="dashVariedadRec"></dashProcByVariedadRec>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByTipo ref="dashVariedadInv"></dashRecByTipo>
-        </div>
+          <dashProcByVariedadInv ref="dashVariedadInv"></dashProcByVariedadInv>
+        </div> -->
       </div>
     </div>
   </div>
@@ -92,18 +92,18 @@
 
 <script type="text/babel">
 // import IEcharts from 'vue-echarts-v3/src/full.js'
-import DashRecByPesoMes from '../components/DashRecByPesoMes.vue'
-import dashRecByVariedad from '../components/dashRecByVariedad.vue'
-import dashRecByTipo from '../components/dashRecByTipo.vue'
+// import DashProcByPesoMes from '../../components/procesos/DashProcByPesoMes.vue'
+// import dashProcByVariedadRec from '../../components/procesos/dashProcByVariedadRec.vue'
+// import dashProcByVariedadInv from '../../components/procesos/dashProcByVariedadInv.vue'
 import { date } from 'quasar'
 
 export default {
   name: 'reportes',
   components: {
     // IEcharts
-    DashRecByPesoMes,
-    dashRecByVariedad,
-    dashRecByTipo
+    // DashProcByPesoMes,
+    // dashProcByVariedadRec,
+    // dashProcByVariedadInv
   },
   props: {},
   data: () => ({
@@ -156,14 +156,14 @@ export default {
       this.setCmbFilterAll(this.filterOne, this.filterTwo, this.dateFrom, this.dateTo)
     },
     setCmbFilter (value) {
-      this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { console.log(response) })
+      this.$store.dispatch('procesos/setActiveFilter', { value }).then(response => { console.log(response) })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
       console.log(filterOne, filterTwo, dateFrom, dateTo)
-      this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {})
-      this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
-      this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
-      this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
+      this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
+      // this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
+      // this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
+      // this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars
@@ -173,7 +173,6 @@ export default {
       console.log(filter)
       this.loading = true
       this.loadTableData(props)
-      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
     },
     loadTableData (props) {
       var df = new Date(this.dateFrom)
@@ -188,7 +187,7 @@ export default {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       // eslint-disable-next-line no-unused-vars
       this.loading = true
-      this.$store.dispatch('reports/getTableData', {
+      this.$store.dispatch('procesos/getTableData', {
         page,
         rowsPerPage,
         sortBy,
@@ -210,7 +209,7 @@ export default {
     },
     loadTableRows () {
       this.loading = true
-      this.$store.dispatch('reports/getTableData', {
+      this.$store.dispatch('procesos/getTableData', {
         username: this.username,
         password: this.password
       }).then(response => {

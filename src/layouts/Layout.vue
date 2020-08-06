@@ -74,18 +74,18 @@ export default {
           disable: false
         },
         {
-          title: 'Reportes',
+          title: 'Recepcion',
           caption: '',
           icon: 'fiber_manual_record',
-          link: '/reportes',
+          link: '/recepcion',
           disable: false
         },
         {
-          title: 'Items',
+          title: 'Procesos',
           caption: '',
           icon: 'fiber_manual_record',
-          link: '/',
-          disable: true
+          link: '/procesos',
+          disable: false
         }
       ]
     }

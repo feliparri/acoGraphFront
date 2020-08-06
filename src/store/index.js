@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import reports from './reports'
+import procesos from './procesos'
 
 Vue.use(Vuex)
 
@@ -18,7 +19,8 @@ Vue.use(Vuex)
 export default function (store) {
   const Store = new Vuex.Store({
     modules: {
-      reports
+      reports,
+      procesos
     },
     // enable strict mode (adds overhead!)
     // for dev mode only
@@ -28,7 +30,13 @@ export default function (store) {
   if (process.env.DEV && module.hot) {
     module.hot.accept(['./reports'], () => {
       const newReports = require('./reports').default
-      Store.hotUpdate({ modules: { reports: newReports } })
+      const newProcesos = require('./procesos').default
+      Store.hotUpdate({
+        modules: {
+          reports: newReports,
+          procesos: newProcesos
+        }
+      })
     })
   }
 
