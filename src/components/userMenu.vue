@@ -1,10 +1,10 @@
 <template>
     <div>
-        <q-btn-dropdown color="primary" label="FELIPE HUERTA">
+        <q-btn-dropdown color="primary" :label="name">
             <q-list>
                 <q-item clickable v-close-popup>
                     <q-item-section>
-                        <q-item-label>Configuracion</q-item-label>
+                        <q-item-label class="disabled">Configuracion</q-item-label>
                     </q-item-section>
                 </q-item>
 
@@ -26,6 +26,8 @@ export default {
   name: 'userMenu',
   props: {},
   data: () => ({
+    name: localStorage.getItem('name'),
+    email: localStorage.getItem('email')
   }),
   created () {
   },

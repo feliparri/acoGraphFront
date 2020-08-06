@@ -67,8 +67,12 @@ export default {
         username: this.username,
         password: this.password
       }).then(response => {
-        this.loading = false
-        this.$router.push('/')
+        this.$store.dispatch('reports/getUserData')
+          .then(response => {
+            console.log(response)
+            this.loading = false
+            this.$router.push('/')
+          })
       })
     }
   }

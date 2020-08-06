@@ -27,6 +27,22 @@ export function retrieveToken (context, credentials) {
   })
 }
 
+export function getUserData (context) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.get(baseUrl + '/api/user')
+        .then(response => {
+          localStorage.setItem('name', response.data.name)
+          localStorage.setItem('email', response.data.email)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
 export function destroyToken (context) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
 
@@ -46,12 +62,11 @@ export function destroyToken (context) {
   }
 }
 
-export function getTableData (context, credentials) {
+export function getTableData (context, props) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
-
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.get(baseUrl + '/api/getResumenLote?page=1')
+      Axios.post(baseUrl + '/api/getResumenLote?page=1', props)
         .then(response => {
           resolve(response)
         }).catch(error => {
@@ -59,4 +74,106 @@ export function getTableData (context, credentials) {
         })
     })
   }
+}
+
+export function getPieChartData (context, props) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartData', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getPieChartDataByCodVariedad (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByCodVariedad', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getPieChartDataByCodVariedadInv (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadInv', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getPieChartDataByPesoMes (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByPesoMes', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function setVariedad (context, props) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getVariedades', props)
+        .then(response => {
+          context.commit('setVariedad', response.data)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function setFiltrarPor (context, props) {
+  context.commit('setFiltrarPor', props)
+}
+
+export function setChartLoading (context, props) {
+  console.log(props)
+  context.commit('setChartLoading', props)
+}
+
+export function setProductor (context, props) {
+  // context.commit('setProductor', props.xAxisData)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getProductores', props)
+        .then(response => {
+          context.commit('setProductor', response.data)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function setActiveFilter (context, props) {
+  console.log(props.value)
+  context.commit('setActiveFilter', props.value)
 }
