@@ -28,11 +28,11 @@
               @filter="filterFn"
             />
           </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <q-select
             label="FILTRAR POR"
             :options-dense="optionsdense"
-            :disable="select_disable"
+            :disable="true"
             v-model="filterOne"
             :options="optFilterOne"
             option-value="name"
@@ -44,15 +44,12 @@
             <q-select
             label="VALOR"
             :options-dense="optionsdense"
-            :disable="select_disable"
+            :disable="true"
             v-model="filterTwo"
             :options="optFilterTwo"
             option-value="name"
             :dense="dense"
             />
-          </div>
-          <!-- <div class="col-lg-1 col-md-3 gt-sm">
-            <q-btn round color="secondary" icon="search" />
           </div> -->
         </div>
       </div>
@@ -118,7 +115,7 @@ export default {
     loading: true,
     dense: false,
     optionsdense: true,
-    select_disable: false,
+    select_disable: true,
     filter: '',
     pagination: {
       sortBy: null,
@@ -195,6 +192,7 @@ export default {
         filter
       }).then(response => {
         /* DATA */
+        console.log(response)
         response.data.data.forEach((value, index) => {
           this.data.push(value)
         })
@@ -217,7 +215,22 @@ export default {
         Object.keys(response.data.data[0]).forEach((value, index) => {
           this.columns.push({ name: value, align: 'left', label: value, field: value, sortable: true })
         })
-        this.visibleColumns.push('TIPO MOV', 'FEC RECEPCION', 'LOTE', 'HUERTO', 'KILO RECIBIDOS', 'BINS RECEPCION', 'KILOS INVENTARIO', 'BINS INVENTARIO', 'PRODUCTOR', 'VARIEDAD')
+        this.visibleColumns.push(
+          'idproceso',
+          'idTurno',
+          'temporada',
+          'cod_planta',
+          'fecha',
+          'semana',
+          'estado',
+          'linea',
+          'tipo',
+          'turno',
+          'cod_especie',
+          'variedad',
+          'cod_exportador',
+          'frio'
+        )
         // this.$options.filter.upperCase(this.visibleColumns)
         this.loading = false
       })

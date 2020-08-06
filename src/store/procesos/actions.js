@@ -14,7 +14,7 @@ export function getTableData (context, props) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.post(baseUrl + '/api/getResumenLote?page=1', props)
+      Axios.post(baseUrl + '/api/getResumenProcesos?page=1', props)
         .then(response => {
           resolve(response)
         }).catch(error => {
