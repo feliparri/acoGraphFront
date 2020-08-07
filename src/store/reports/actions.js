@@ -90,6 +90,36 @@ export function getPieChartData (context, props) {
   }
 }
 
+export function getPieChartDataByCodVariedadGrpProductor (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadGrpProductor', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getPieChartDataByCodVariedadInvGrpProductor (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadInvGrpProductor', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
 export function getPieChartDataByCodVariedad (context, props) {
   console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token

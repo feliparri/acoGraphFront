@@ -85,6 +85,12 @@
         <div class="col-xs-12 col-sm-12 col-md-6">
           <dashRecByVariedadInv ref="dashVariedadInv"></dashRecByVariedadInv>
         </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dashRecByVariedadRecGrpProductor v-show="showChartByVariedad" ref="dashVariedadRecGrpProductor"></dashRecByVariedadRecGrpProductor>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dashRecByVariedadInvGrpProductor v-show="showChartByVariedad" ref="dashVariedadInvGrpProductor"></dashRecByVariedadInvGrpProductor>
+        </div>
       </div>
     </div>
   </div>
@@ -95,6 +101,8 @@
 import DashRecByPesoMes from '../../components/recepcion/DashRecByPesoMes'
 import dashRecByVariedadRec from '../../components/recepcion/dashRecByVariedadRec'
 import dashRecByVariedadInv from '../../components/recepcion/dashRecByVariedadInv'
+import dashRecByVariedadRecGrpProductor from '../../components/recepcion/dashRecByVariedadRecGrpProductor'
+import dashRecByVariedadInvGrpProductor from '../../components/recepcion/dashRecByVariedadInvGrpProductor'
 import { date } from 'quasar'
 
 export default {
@@ -103,7 +111,9 @@ export default {
     // IEcharts
     DashRecByPesoMes,
     dashRecByVariedadRec,
-    dashRecByVariedadInv
+    dashRecByVariedadInv,
+    dashRecByVariedadRecGrpProductor,
+    dashRecByVariedadInvGrpProductor
   },
   props: {},
   data: () => ({
@@ -120,6 +130,7 @@ export default {
     optionsdense: true,
     select_disable: false,
     filter: '',
+    showChartByVariedad: false,
     pagination: {
       sortBy: null,
       descending: false,
@@ -159,11 +170,18 @@ export default {
       this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { console.log(response) })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
+      if (filterOne === 'VARIEDAD') {
+        this.showChartByVariedad = true
+      } else {
+        this.showChartByVariedad = false
+      }
       console.log(filterOne, filterTwo, dateFrom, dateTo)
       this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadRecGrpProductor.loadPieChartDataByCodVariedadGrpProductor(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadInvGrpProductor.loadPieChartDataByCodVariedadInvGrpProductor(dateFrom, dateTo, filterOne, filterTwo)
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars
