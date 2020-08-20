@@ -1,38 +1,14 @@
 <template>
   <div class="q-pa-md">
     <div class="row">
-      <div class="col q-gutter-lg">
+      <div class="col-12 q-gutter-lg">
         <div class="row q-col-gutter-md">
-          <div class="col-12 q-table__title">Proceso por periodo  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
-            <q-datetime-picker clearable auto-update-value mode="date" label="Desde" v-model="dateFrom" ></q-datetime-picker >
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
-            <q-datetime-picker clearable auto-update-value mode="date" label="Hasta" v-model="dateTo" ></q-datetime-picker >
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <q-select
-              label="MOSTRAR/OCULTAR COLUMNAS"
-              v-model="visibleColumns"
-              multiple
-              :disable="select_disable"
-              :dense="dense"
-              :options-dense="optionsdense"
-              :display-value="$q.lang.table.columns"
-              emit-value
-              map-options
-              transition-show="jump-up"
-              transition-hide="jump-up"
-              :options="columns"
-              option-value="name"
-              @filter="filterFn"
-            />
-          </div>
-          <!-- <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="col-12 q-table__title">PROCESO PERIODO  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <q-select
             label="FILTRAR POR"
             :options-dense="optionsdense"
-            :disable="true"
+            :disable="select_disable"
             v-model="filterOne"
             :options="optFilterOne"
             option-value="name"
@@ -40,50 +16,98 @@
             @input="setCmbFilter"
             />
           </div>
-          <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <q-select
             label="VALOR"
             :options-dense="optionsdense"
-            :disable="true"
+            :disable="select_disable"
             v-model="filterTwo"
             :options="optFilterTwo"
             option-value="name"
             :dense="dense"
             />
-          </div> -->
+          </div>
         </div>
       </div>
+      <div class="col-12">
+        <treeProcesos ref="treeProcesos"></treeProcesos>
+      </div>
     </div>
+    <q-dialog v-model="dialog" :position="position">
+      <q-card style="min-width: 100%;">
+        <q-card-section>
+          <div class="text-h6">DETALLE PROCESO</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <q-select
+                label="MOSTRAR/OCULTAR COLUMNAS"
+                v-model="visibleColumns"
+                multiple
+                :disable="select_disable"
+                :dense="dense"
+                :options-dense="optionsdense"
+                :display-value="$q.lang.table.columns"
+                emit-value
+                map-options
+                transition-show="jump-up"
+                transition-hide="jump-up"
+                :options="columns"
+                option-value="name"
+                @filter="filterFn"
+              />
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <q-table
+                title=""
+                :data="data"
+                :columns="columns"
+                row-key="id"
+                :pagination.sync="pagination"
+                :loading="loading"
+                :filter="filter"
+                @request="loadTableData"
+                binary-state-sort
+                :visible-columns="visibleColumns"
+                dense
+              >
+                <template v-slot:top-right>
+                  <q-btn
+                    color="primary"
+                    icon-right="archive"
+                    label="Exportar a CSV"
+                    no-caps
+                    @click="exportTable"
+                  />
+                </template>
+              </q-table>
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="OK" v-close-popup />
+        </q-card-actions>
+      </q-card>
+      </q-dialog>
     <div class="q-pa-sm">
-      <q-table
-        title="Treats"
-        :data="data"
-        :columns="columns"
-        row-key="id"
-        :pagination.sync="pagination"
-        :loading="loading"
-        :filter="filter"
-        @request="loadTableData"
-        binary-state-sort
-        :visible-columns="visibleColumns"
-        dense
-      >
-        <template v-slot:top>
-        </template>
-      </q-table>
       <br>
-      <div class="row q-col-gutter-lg">
-        <!-- <div class="col-xs-12 col-sm-12 col-md-12">
-          <DashProcByPesoMes ref="dashPeso"></DashProcByPesoMes>
+      <q-btn class="float-right" label="Detalle" icon="search" color="primary" @click="open('top')" />
+      <br>
+      <br>
+      <!--<div class="q-col-gutter-md row">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+          <q-datetime-picker clearable auto-update-value mode="date" label="Desde" v-model="dateFrom" ></q-datetime-picker >
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashProcByVariedadRec ref="dashVariedadRec"></dashProcByVariedadRec>
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
+          <q-datetime-picker clearable auto-update-value mode="date" label="Hasta" v-model="dateTo" ></q-datetime-picker >
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashProcByVariedadInv ref="dashVariedadInv"></dashProcByVariedadInv>
-        </div> -->
-      </div>
+      </div>-->
+      <br>
     </div>
+    <q-separator/>
+    <dashProcByProductorVariedad/>
   </div>
 </template>
 
@@ -92,18 +116,46 @@
 // import DashProcByPesoMes from '../../components/procesos/DashProcByPesoMes.vue'
 // import dashProcByVariedadRec from '../../components/procesos/dashProcByVariedadRec.vue'
 // import dashProcByVariedadInv from '../../components/procesos/dashProcByVariedadInv.vue'
-import { date } from 'quasar'
+import treeProcesos from '../../components/procesos/treeProcesos.vue'
+import dashProcByProductorVariedad from '../../components/procesos/dashProcByProductorVariedad.vue'
+import { date, exportFile } from 'quasar'
+
+function wrapCsvValue (val, formatFn) {
+  // eslint-disable-next-line no-void
+  let formatted = formatFn !== void 0
+    ? formatFn(val)
+    : val
+
+  // eslint-disable-next-line no-void
+  formatted = formatted === void 0 || formatted === null
+    ? ''
+    : String(formatted)
+
+  formatted = formatted.split('"').join('""')
+  /**
+   * Excel accepts \n and \r in strings, but some other CSV parsers do not
+   * Uncomment the next two lines to escape new lines
+   */
+  // .split('\n').join('\\n')
+  // .split('\r').join('\\r')
+
+  return `"${formatted}"`
+}
 
 export default {
   name: 'reportes',
   components: {
-    // IEcharts
-    // DashProcByPesoMes,
+    treeProcesos,
+    dashProcByProductorVariedad
+    // IEcharts,
+    // DashProcByPesoMes
     // dashProcByVariedadRec,
     // dashProcByVariedadInv
   },
   props: {},
   data: () => ({
+    dialog: false,
+    position: 'top',
     dateFrom: '',
     dateTo: '',
     visibleColumns: [],
@@ -115,7 +167,7 @@ export default {
     loading: true,
     dense: false,
     optionsdense: true,
-    select_disable: true,
+    select_disable: false,
     filter: '',
     pagination: {
       sortBy: null,
@@ -127,6 +179,8 @@ export default {
   }),
   created () {
     this.loadTableRows()
+    this.$store.dispatch('procesos/setProductor').then(response => {})
+    this.$store.dispatch('procesos/setVariedad').then(response => {})
   },
   mounted () {
     this.onRequest({
@@ -138,7 +192,7 @@ export default {
   },
   computed: {
     optFilterTwo: function () {
-      return this.$store.state.reports.filtro
+      return this.$store.state.procesos.filtro
     },
     now: function () {
       return Date.now()
@@ -158,7 +212,7 @@ export default {
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
       console.log(filterOne, filterTwo, dateFrom, dateTo)
       this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
-      // this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.treeProcesos.getResumenRendimiento(dateFrom, dateTo, filterOne, filterTwo)
       // this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
       // this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
     },
@@ -235,6 +289,10 @@ export default {
         this.loading = false
       })
     },
+    open (position) {
+      this.position = position
+      this.dialog = true
+    },
     filterFn (val, update) {
       // console.log(val === '')
       if (val === '') {
@@ -253,6 +311,32 @@ export default {
         const needle = val.toLowerCase()
         this.options = this.columns.filter(v => v.toLowerCase().indexOf(needle) > -1)
       })
+    },
+    exportTable () {
+      // naive encoding to csv format
+      const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(
+        this.data.map(row => this.columns.map(col => wrapCsvValue(
+          typeof col.field === 'function'
+            ? col.field(row)
+            // eslint-disable-next-line no-void
+            : row[col.field === void 0 ? col.name : col.field],
+          col.format
+        )).join(','))
+      ).join('\r\n')
+
+      const status = exportFile(
+        'table-export.csv',
+        content,
+        'text/csv'
+      )
+
+      if (status !== true) {
+        this.$q.notify({
+          message: 'Browser denied file download...',
+          color: 'negative',
+          icon: 'warning'
+        })
+      }
     }
   },
   filters: {

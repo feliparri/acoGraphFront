@@ -5,7 +5,7 @@
         <div class="row q-col-gutter-none">
           <div class="col-10">
             <div class="my-content">
-              <div class="text-h6">Resumen RECEPCION</div>
+              <div class="text-h6">Resumen Productor Variedad</div>
               <div class="text-subtitle2">Kilos x Variedad en Recepcion</div>
             </div>
           </div>
@@ -26,10 +26,10 @@
 
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
-import { date } from 'quasar'
+// import { date } from 'quasar'
 
 export default {
-  name: 'dashProcByVariedadRec',
+  name: 'dashProcByProductorVariedad',
   components: {
     IEcharts
   },
@@ -37,50 +37,59 @@ export default {
   data: () => ({
     layout: 'comfortable',
     side: 'left',
-    loading: true,
+    loading: false,
+    variedades: [],
+    series: [],
     pie: {
-      title: {
-        text: '',
-        x: 'left',
-        textStyle: { fontSize: '11' }
-      },
+      // color: ['#003366', '#006699', '#4cabce', '#e5323e'],
       tooltip: {
-        trigger: 'item',
-        formatter: function (params) {
-          return '<b>' + params.name + '</b>' + ' <br/>' + Math.round(params.value).toLocaleString('es') + ' Kg.' + '(' + params.percent + '%)'
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
         }
       },
       legend: {
-        type: 'scroll',
-        orient: 'horizontal',
-        right: 0,
-        top: 0,
-        bottom: 40,
-        data: []
-
-        // selected: data.selected
+        data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.']
       },
+      toolbox: {
+        show: true,
+        orient: 'vertical',
+        left: 'right',
+        top: 'center',
+        feature: {
+          mark: { show: true },
+          dataView: { show: true, readOnly: false },
+          magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+          restore: { show: true },
+          saveAsImage: { show: true }
+        }
+      },
+      xAxis: [
+        {
+          type: 'category',
+          axisTick: { show: false },
+          data: ['BROOKFIELD', 'GALAVAL']
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value'
+        }
+      ],
       series: [
         {
-          avoidLabelOverlap: false,
-          label: {
-            show: false,
-            position: 'left'
-          },
-          radius: ['30%', '70%'],
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '10',
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          name: 'PR X ESP',
-          type: 'pie',
-          data: []
+          name: '166480 - LA CUESTA',
+          type: 'bar',
+          barGap: 0,
+          label: { show: true },
+          data: [320, 332, 301, 334, 390]
+        },
+        {
+          name: '95841 - ROBERTO TAMM Y CIA.LTDA.',
+          type: 'bar',
+          barGap: 0,
+          label: { show: true },
+          data: [320, 332, 301, 334, 390]
         }
       ]
     }
@@ -88,6 +97,9 @@ export default {
   computed: {
     chartLoading: function () {
       return this.$store.state.reports.chartLoading
+    },
+    productores: function () {
+      return this.$store.getters['procesos/productores']
     }
   },
   created () {
@@ -101,20 +113,21 @@ export default {
   },
   methods: {
     loadPieChartDataByCodVariedad (dateFrom, dateTo, filterOne, filterTwo) {
-      // this.loading = true
-      const dFrom = new Date(dateFrom)
-      const from = date.formatDate(dFrom, 'YYYY-MM-DD')
-      const dTo = new Date(dateTo)
-      const to = date.formatDate(dTo, 'YYYY-MM-DD')
-      this.$store.dispatch('reports/getPieChartDataByCodVariedad', { from, to, filterOne, filterTwo }).then(response => {
-        /* DATA */
-        this.pie.series[0].data = []
+      this.$store.dispatch('procesos/getChartProcesosRendimiento', { filterOne, filterTwo }).then(response => {
         response.data.forEach((value, index) => {
-          this.pie.series[0].data.push({ value: value.KILOS_RECEPCIONADOS, name: value.VARIEDAD })
-          this.pie.legend.data.push(value.VARIEDAD)
+          // this.pie.legend.data.push(value[0])
+          // this.pie.xAxis[0].data.push(value[0])
+          // variedad value[0]
+          // datos value[1]
+          console.log(value[0])
+          value[1].forEach((value2, index2) => {
+          })
+          /* value[1].forEach((value2, index2) => {
+            console.log(value2)
+          }) */
         })
-        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
       })
+      this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
     },
     doRandom () {
       const that = this

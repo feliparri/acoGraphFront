@@ -24,6 +24,36 @@ export function getTableData (context, props) {
   }
 }
 
+export function getReporteProcesos (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getReporteProcesos', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getChartProcesosRendimiento (context, props) {
+  console.log(props)
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getChartProcesosRendimiento', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
 export function setVariedad (context, props) {
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
@@ -31,6 +61,20 @@ export function setVariedad (context, props) {
       Axios.post(baseUrl + '/api/getVariedades', props)
         .then(response => {
           context.commit('setVariedad', response.data)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function setProductor (context, props) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      Axios.post(baseUrl + '/api/getProductores', props)
+        .then(response => {
+          context.commit('setProductor', response.data)
         }).catch(error => {
           reject(error)
         })
