@@ -11,15 +11,16 @@ export const setProductor = (state, productores) => {
   state.productores.push('todo')
   productores.forEach(element => {
     console.log(element.productor)
-    state.productores.push(shortName(element.productor))
+    // state.productores.push(shortName(element.productor))
+    state.productores.push(element.productor)
   })
 }
 
-const shortName = (texto) => {
+/* const shortName = (texto) => {
   var spltext = texto.split('-')
   var txt = spltext[1].substring(0, 15).trim()
   return txt.substring(0, 15)
-}
+} */
 
 export const setVariedad = (state, variedades) => {
   state.variedades = variedades

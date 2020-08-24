@@ -6,7 +6,7 @@
           <div class="col-10">
             <div class="my-content">
               <div class="text-h6">Resumen Productor Variedad</div>
-              <div class="text-subtitle2">Kilos x Variedad en Recepcion</div>
+              <div class="text-subtitle2">% Kilos x Variedad en Recepcion</div>
             </div>
           </div>
           <div class="col-2">
@@ -38,7 +38,6 @@ export default {
     layout: 'comfortable',
     side: 'left',
     loading: false,
-    variedades: [],
     series: [],
     pie: {
       // color: ['#003366', '#006699', '#4cabce', '#e5323e'],
@@ -52,16 +51,26 @@ export default {
         data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.']
       },
       toolbox: {
+        showTitle: false,
         show: true,
-        orient: 'vertical',
+        orient: 'horizontal',
         left: 'right',
-        top: 'center',
+        top: 'bottom',
         feature: {
           mark: { show: true },
-          dataView: { show: true, readOnly: false },
-          magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
-          restore: { show: true },
-          saveAsImage: { show: true }
+          // dataView: { show: true, readOnly: false, title: 'Exportar', lang: ['Vista de Tabla', 'Cerrar', 'Refrescar'] },
+          dataZoom: { show: true, title: 'Zoom' },
+          magicType: {
+            show: true,
+            type: ['line', 'bar', 'stack'],
+            title: {
+              line: 'Line',
+              bar: 'Bar',
+              stack: 'Stack'
+            }
+          },
+          restore: { show: true, title: 'Restaurar' },
+          saveAsImage: { show: true, title: 'Guardar Img' }
         }
       },
       xAxis: [
@@ -76,22 +85,7 @@ export default {
           type: 'value'
         }
       ],
-      series: [
-        {
-          name: '166480 - LA CUESTA',
-          type: 'bar',
-          barGap: 0,
-          label: { show: true },
-          data: [320, 332, 301, 334, 390]
-        },
-        {
-          name: '95841 - ROBERTO TAMM Y CIA.LTDA.',
-          type: 'bar',
-          barGap: 0,
-          label: { show: true },
-          data: [320, 332, 301, 334, 390]
-        }
-      ]
+      series: []
     }
   }),
   computed: {
@@ -100,6 +94,9 @@ export default {
     },
     productores: function () {
       return this.$store.getters['procesos/productores']
+    },
+    variedades: function () {
+      return this.$store.getters['procesos/variedades']
     }
   },
   created () {
@@ -113,18 +110,39 @@ export default {
   },
   methods: {
     loadPieChartDataByCodVariedad (dateFrom, dateTo, filterOne, filterTwo) {
+      this.pie.series = []
+      this.pie.xAxis[0].data = []
+      this.pie.legend.data = this.productores
+      /* this.variedades.forEach((variedades, indexVariedades) => {
+        this.pie.xAxis[0].data.push(variedades.variedad)
+      }) */
       this.$store.dispatch('procesos/getChartProcesosRendimiento', { filterOne, filterTwo }).then(response => {
-        response.data.forEach((value, index) => {
-          // this.pie.legend.data.push(value[0])
-          // this.pie.xAxis[0].data.push(value[0])
-          // variedad value[0]
-          // datos value[1]
-          console.log(value[0])
-          value[1].forEach((value2, index2) => {
+        response.data.forEach((variedades, indexVariedades) => {
+          this.pie.xAxis[0].data.push(variedades[0])
+        })
+        // console.log(response)
+        this.productores.forEach((value, index) => {
+          var dataProd = []
+          response.data.forEach((value2, index2) => {
+            // console.log(value2[1])
+            value2[1].forEach((value3, index3) => {
+              // console.log(value3)
+              if (value3[1].length > 0 && value3[0] === value) {
+                // console.log(value + '-' + value3[1][0].rendimiento)
+                // dataProd.push(this.$options.filters.numberFormat(value3[1][0].rendimiento.toFixed(4) * 100))
+                dataProd.push(Number(this.$options.filters.numberFormat(value3[1][0].rendimiento * 100)).toFixed(2))
+              }
+            })
           })
-          /* value[1].forEach((value2, index2) => {
-            console.log(value2)
-          }) */
+          this.pie.series.push(
+            {
+              name: value,
+              type: 'bar',
+              barGap: 0,
+              label: { show: true },
+              data: dataProd
+            }
+          )
         })
       })
       this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
@@ -145,6 +163,14 @@ export default {
     }
   },
   filters: {
+    buscar: function () {
+      var varSearch = 'CUESTA'
+      var search = new RegExp(varSearch, '166480 - LA CUESTA')
+      console.log(search)
+    },
+    numberFormat: function (num) {
+      return String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')
+    }
   }
 }
 
