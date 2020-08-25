@@ -36,7 +36,7 @@ export default {
   props: {},
   data: () => ({
     layout: 'comfortable',
-    side: 'left',
+    side: 'top',
     loading: false,
     series: [],
     pie: {
@@ -62,7 +62,7 @@ export default {
           dataZoom: { show: true, title: 'Zoom' },
           magicType: {
             show: true,
-            type: ['line', 'bar', 'stack'],
+            type: ['line'],
             title: {
               line: 'Line',
               bar: 'Bar',
@@ -139,7 +139,8 @@ export default {
               name: value,
               type: 'bar',
               barGap: 0,
-              label: { show: true },
+              stack: 'x',
+              label: { show: false },
               data: dataProd
             }
           )
