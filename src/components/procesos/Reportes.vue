@@ -107,7 +107,7 @@
       <br>
     </div>
     <q-separator/>
-    <dashProcByProductorVariedad/>
+    <dashProcByProductorVariedad ref="dashProcByProductorVariedad"/>
   </div>
 </template>
 
@@ -213,8 +213,8 @@ export default {
       // console.log(filterOne, filterTwo, dateFrom, dateTo)
       this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.treeProcesos.getResumenRendimiento(dateFrom, dateTo, filterOne, filterTwo)
-      // this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
-      // this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashProcByProductorVariedad.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
+      // this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars

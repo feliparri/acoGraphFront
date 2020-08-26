@@ -84,42 +84,17 @@ export default {
           productor: 'name'
         }
       ],
-      columns: [
-        { name: 'productor', field: 'productor', label: 'PRODUCTOR', align: 'left' }
-      ],
+      columns: [],
       dataInsideTotal: [],
-      dataInside: [
-        {
-          index: null,
-          productor: null,
-          variedad: 'name',
-          kilos_vac: 159,
-          kilos_merc: 6.0
-        }
-      ],
-      columnsInside: [
-        { name: 'variedad', field: 'variedad', label: 'variedad timbrada' },
-        { name: 'kilos_vac', field: 'kilos_vac', label: 'Kilos Vac' },
-        { name: 'kilos_merc', field: 'kilos_merc', label: 'Kilos Exp' }
-      ],
+      dataInside: [],
+      columnsInside: [],
       simple: [
         {
           label: 'RESUMEN RENDIMIENTO',
           avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
           children: null
-          /*  [
-            {
-              label: 'Good food (with icon)',
-              icon: 'restaurant_menu',
-              children: [
-                { label: 'Quality ingredients' },
-                { label: 'Good recipe' }
-              ]
-            }
-          ] */
         }
-      ],
-      expanded: ['RESUMEN RENDIMIENTO', 'Good food (with icon)']
+      ]
     }
   },
   computed: {

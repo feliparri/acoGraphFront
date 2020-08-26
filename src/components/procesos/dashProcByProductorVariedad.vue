@@ -27,6 +27,7 @@
 <script type="text/babel">
 import IEcharts from 'vue-echarts-v3/src/full.js'
 // import { date } from 'quasar'
+import _ from 'lodash'
 
 export default {
   name: 'dashProcByProductorVariedad',
@@ -48,14 +49,16 @@ export default {
         }
       },
       legend: {
-        data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.']
+        data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.'],
+        type: 'scroll',
+        bottom: 10
       },
       toolbox: {
         showTitle: false,
         show: true,
         orient: 'horizontal',
         left: 'right',
-        top: 'bottom',
+        top: 'top',
         feature: {
           mark: { show: true },
           // dataView: { show: true, readOnly: false, title: 'Exportar', lang: ['Vista de Tabla', 'Cerrar', 'Refrescar'] },
@@ -110,38 +113,48 @@ export default {
   },
   methods: {
     loadPieChartDataByCodVariedad (dateFrom, dateTo, filterOne, filterTwo) {
+      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
       this.pie.series = []
       this.pie.xAxis[0].data = []
-      this.pie.legend.data = this.productores
-      /* this.variedades.forEach((variedades, indexVariedades) => {
-        this.pie.xAxis[0].data.push(variedades.variedad)
-      }) */
+      this.pie.legend.data = Object.values(this.productores)
+      _.pull(this.pie.legend.data, 'todo') // ['a', 'c', 'd']
       this.$store.dispatch('procesos/getChartProcesosRendimiento', { filterOne, filterTwo }).then(response => {
         response.data.forEach((variedades, indexVariedades) => {
           this.pie.xAxis[0].data.push(variedades[0])
         })
-        // console.log(response)
-        this.productores.forEach((value, index) => {
-          var dataProd = []
-          response.data.forEach((value2, index2) => {
-            // console.log(value2[1])
-            value2[1].forEach((value3, index3) => {
-              // console.log(value3)
-              if (value3[1].length > 0 && value3[0] === value) {
-                // console.log(value + '-' + value3[1][0].rendimiento)
-                // dataProd.push(this.$options.filters.numberFormat(value3[1][0].rendimiento.toFixed(4) * 100))
-                dataProd.push(Number(this.$options.filters.numberFormat(value3[1][0].rendimiento * 100)).toFixed(2))
+        var dataProd = []
+        var productores = Object.values(this.productores)
+        response.data.forEach((variedades, index1) => {
+          productores.forEach((productor, index) => {
+            variedades[1].forEach((productor2, index) => {
+              if (productor2[0].productor === productor) {
+                console.log(productor2[0].variedad[0])
+                dataProd.push([productor2[0].productor, {
+                  data: productor2[0].rendimiento,
+                  variedad: productor2[0].variedad['Variedad Timbrada']
+                }])
               }
             })
           })
+        })
+        console.log(dataProd)
+        productores.forEach((productor, index) => {
+          // var data = _.filter(dataProd, '166480 - LA CUESTA').map(v => v.data)
+          var stackedData = []
+          dataProd.forEach((data, index) => {
+            if (data[0] === productor) {
+              // console.log(data[1].data + '-' + productor)
+              stackedData.push(Number(this.$options.filters.numberFormat(data[1].data * 100)).toFixed(2))
+            }
+          })
           this.pie.series.push(
             {
-              name: value,
+              name: productor,
               type: 'bar',
               barGap: 0,
               stack: 'x',
               label: { show: false },
-              data: dataProd
+              data: stackedData
             }
           )
         })
