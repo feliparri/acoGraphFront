@@ -51,7 +51,7 @@ export default {
       legend: {
         data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.'],
         type: 'scroll',
-        bottom: 10
+        bottom: '75%'
       },
       toolbox: {
         showTitle: false,
@@ -78,8 +78,16 @@ export default {
       },
       xAxis: [
         {
+          textStyle: {
+            align: 'left'
+          },
+          position: 'bottom',
           type: 'category',
-          axisTick: { show: false },
+          nameRotate: 90,
+          axisLabel: {
+            interval: 0,
+            rotate: 30
+          },
           data: ['BROOKFIELD', 'GALAVAL']
         }
       ],
