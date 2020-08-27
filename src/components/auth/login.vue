@@ -69,7 +69,6 @@ export default {
       }).then(response => {
         this.$store.dispatch('reports/getUserData')
           .then(response => {
-            console.log(response)
             this.loading = false
             this.$router.push('/')
           })

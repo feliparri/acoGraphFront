@@ -36,7 +36,6 @@ export default function ({ store }) {
         next()
       }
     } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-      console.log(store.getters['reports/loggedIn'])
       if (store.getters['reports/loggedIn']) {
         next({ name: 'home' })
       } else {
