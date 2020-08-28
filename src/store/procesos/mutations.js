@@ -10,7 +10,6 @@ export const setProductor = (state, productores) => {
   state.productores = []
   state.productores.push('todo')
   productores.forEach(element => {
-    console.log(element.productor)
     // state.productores.push(shortName(element.productor))
     state.productores.push(element.productor)
   })
@@ -35,7 +34,6 @@ export const setActiveFilter = (state, filtro) => {
   if (filtro === 'PRODUCTOR') {
     state.filtro = state.productores
   } else if (filtro === 'VARIEDAD') {
-    console.log(state.variedades)
     state.variedades.forEach(element => {
       state.filtro.push(element.variedad)
     })
@@ -45,6 +43,5 @@ export const setActiveFilter = (state, filtro) => {
 }
 
 export const setFiltrarPor = (state, filtrarPor) => {
-  console.log(filtrarPor.filterTwo !== null)
   state.filtrarPor = filtrarPor.filterTwo !== null ? filtrarPor : { filterTwo: 'todo' }
 }

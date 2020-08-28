@@ -121,7 +121,7 @@ export default {
   },
   methods: {
     loadPieChartDataByCodVariedad (dateFrom, dateTo, filterOne, filterTwo) {
-      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { })
       this.pie.series = []
       this.pie.xAxis[0].data = []
       this.pie.legend.data = Object.values(this.productores)
@@ -136,7 +136,6 @@ export default {
           productores.forEach((productor, index) => {
             variedades[1].forEach((productor2, index) => {
               if (productor2[0].productor === productor) {
-                console.log(productor2[0].variedad[0])
                 dataProd.push([productor2[0].productor, {
                   data: productor2[0].rendimiento,
                   variedad: productor2[0].variedad['Variedad Timbrada']
@@ -145,13 +144,11 @@ export default {
             })
           })
         })
-        console.log(dataProd)
         productores.forEach((productor, index) => {
           // var data = _.filter(dataProd, '166480 - LA CUESTA').map(v => v.data)
           var stackedData = []
           dataProd.forEach((data, index) => {
             if (data[0] === productor) {
-              // console.log(data[1].data + '-' + productor)
               stackedData.push(Number(this.$options.filters.numberFormat(data[1].data * 100)).toFixed(2))
             }
           })
@@ -167,7 +164,7 @@ export default {
           )
         })
       })
-      this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { })
     },
     doRandom () {
       const that = this
@@ -186,9 +183,9 @@ export default {
   },
   filters: {
     buscar: function () {
-      var varSearch = 'CUESTA'
+      /* var varSearch = 'CUESTA'
       var search = new RegExp(varSearch, '166480 - LA CUESTA')
-      console.log(search)
+       */
     },
     numberFormat: function (num) {
       return String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')

@@ -25,7 +25,6 @@ export function getTableData (context, props) {
 }
 
 export function getReporteProcesos (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -40,7 +39,6 @@ export function getReporteProcesos (context, props) {
 }
 
 export function getChartProcesosRendimiento (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -87,6 +85,5 @@ export function setFiltrarPor (context, props) {
 }
 
 export function setActiveFilter (context, props) {
-  console.log(props.value)
   context.commit('setActiveFilter', props.value)
 }

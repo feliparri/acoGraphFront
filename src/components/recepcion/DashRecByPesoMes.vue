@@ -119,7 +119,7 @@ export default {
             { type: 'bar' }
           ]
         }
-        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { })
       })
     },
     myEventHandler (e) {

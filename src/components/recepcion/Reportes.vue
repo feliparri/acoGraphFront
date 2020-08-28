@@ -167,7 +167,7 @@ export default {
       this.setCmbFilterAll(this.filterOne, this.filterTwo, this.dateFrom, this.dateTo)
     },
     setCmbFilter (value) {
-      this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
       if (filterOne === 'VARIEDAD') {
@@ -175,7 +175,6 @@ export default {
       } else {
         this.showChartByVariedad = false
       }
-      console.log(filterOne, filterTwo, dateFrom, dateTo)
       this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
@@ -188,10 +187,9 @@ export default {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       // eslint-disable-next-line no-unused-vars
       const filter = props.filter
-      console.log(filter)
       this.loading = true
       this.loadTableData(props)
-      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { })
     },
     loadTableData (props) {
       var df = new Date(this.dateFrom)
@@ -242,10 +240,8 @@ export default {
       })
     },
     filterFn (val, update) {
-      // console.log(val === '')
       if (val === '') {
         update(() => {
-          console.log(update)
           this.options = this.columns
 
           // with Quasar v1.7.4+

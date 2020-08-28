@@ -21,7 +21,6 @@ export function retrieveToken (context, credentials) {
       context.commit('retrieveToken', token)
       resolve(response)
     }).catch(error => {
-      console.log(context)
       reject(error)
     })
   })
@@ -91,7 +90,6 @@ export function getPieChartData (context, props) {
 }
 
 export function getPieChartDataByCodVariedadGrpProductor (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -106,7 +104,6 @@ export function getPieChartDataByCodVariedadGrpProductor (context, props) {
 }
 
 export function getPieChartDataByCodVariedadInvGrpProductor (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -121,7 +118,6 @@ export function getPieChartDataByCodVariedadInvGrpProductor (context, props) {
 }
 
 export function getPieChartDataByCodVariedad (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -136,7 +132,6 @@ export function getPieChartDataByCodVariedad (context, props) {
 }
 
 export function getPieChartDataByCodVariedadInv (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -151,7 +146,6 @@ export function getPieChartDataByCodVariedadInv (context, props) {
 }
 
 export function getPieChartDataByPesoMes (context, props) {
-  console.log(props)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -184,7 +178,6 @@ export function setFiltrarPor (context, props) {
 }
 
 export function setChartLoading (context, props) {
-  console.log(props)
   context.commit('setChartLoading', props)
 }
 
@@ -204,6 +197,5 @@ export function setProductor (context, props) {
 }
 
 export function setActiveFilter (context, props) {
-  console.log(props.value)
   context.commit('setActiveFilter', props.value)
 }

@@ -207,21 +207,18 @@ export default {
       this.setCmbFilterAll(this.filterOne, this.filterTwo, this.dateFrom, this.dateTo)
     },
     setCmbFilter (value) {
-      this.$store.dispatch('procesos/setActiveFilter', { value }).then(response => { console.log(response) })
+      this.$store.dispatch('procesos/setActiveFilter', { value }).then(response => { })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
-      // console.log(filterOne, filterTwo, dateFrom, dateTo)
       this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.treeProcesos.getResumenRendimiento(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashProcByProductorVariedad.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
-      // this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       // eslint-disable-next-line no-unused-vars
       const filter = props.filter
-      // console.log(filter)
       this.loading = true
       this.loadTableData(props)
     },
@@ -246,7 +243,6 @@ export default {
         filter
       }).then(response => {
         /* DATA */
-        // console.log(response)
         response.data.data.forEach((value, index) => {
           this.data.push(value)
         })
@@ -294,10 +290,8 @@ export default {
       this.dialog = true
     },
     filterFn (val, update) {
-      // console.log(val === '')
       if (val === '') {
         update(() => {
-          // console.log(update)
           this.options = this.columns
 
           // with Quasar v1.7.4+

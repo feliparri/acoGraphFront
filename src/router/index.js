@@ -29,10 +29,8 @@ export default function ({ store }) {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       // next()
       if (!store.getters['reports/loggedIn']) {
-        // console.log('va a login->' + !store.getters.loggedIn)
         next({ name: 'login' })
       } else {
-        // console.log('va al next')
         next()
       }
     } else if (to.matched.some(record => record.meta.requiresVisitor)) {

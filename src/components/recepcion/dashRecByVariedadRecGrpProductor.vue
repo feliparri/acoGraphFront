@@ -106,7 +106,6 @@ export default {
       const from = date.formatDate(dFrom, 'YYYY-MM-DD')
       const dTo = new Date(dateTo)
       const to = date.formatDate(dTo, 'YYYY-MM-DD')
-      console.log(filterOne)
       this.$store.dispatch('reports/getPieChartDataByCodVariedadGrpProductor', { from, to, filterOne, filterTwo }).then(response => {
         /* DATA */
         this.pie.series[0].data = []
@@ -121,7 +120,7 @@ export default {
             this.pie.legend.data.push(value.variedad)
           })
         }
-        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { })
       })
     },
     doRandom () {

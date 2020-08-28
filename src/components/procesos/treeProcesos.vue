@@ -115,13 +115,10 @@ export default {
       const to = date.formatDate(dTo, 'YYYY-MM-DD')
       // var arrChildren = []
       var arrChildrenData = []
-      // console.log(from, to, filterOne, filterTwo)
       this.$store.dispatch('procesos/getReporteProcesos', { from, to, filterOne, filterTwo }).then(response => {
         response.data.forEach((value, index) => {
           value[Object.keys(value)[0]].forEach((value2, index2) => {
             this.data.push({ productor: Object.keys(value)[0] })
-            // console.log(value2.productor.includes('166480 - LA CUESTA'))
-            // console.log(value2)
             value2.forEach((value3, index3) => {
               arrChildrenData.push(
                 {
@@ -156,12 +153,6 @@ export default {
                 rendimiento: _.sumBy(objs, 'rendimiento')
               }))
               .value()
-
-            // this.dataInsideTotal.push(output)
-            /* this.dataInside.forEach((value4, index4) => {
-              console.log(Object.keys(value)[0])
-              arrChildrenDataTotals.push([])
-            }) */
           })
         })
       })
@@ -169,9 +160,8 @@ export default {
   },
   filters: {
     buscar: function () {
-      var varSearch = 'CUESTA'
-      var search = new RegExp(varSearch, '166480 - LA CUESTA')
-      console.log(search)
+      /* var varSearch = 'CUESTA'
+      var search = new RegExp(varSearch, '166480 - LA CUESTA') */
     },
     numberFormat: function (num) {
       return String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1.')

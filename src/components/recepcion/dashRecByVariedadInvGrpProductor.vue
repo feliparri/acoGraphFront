@@ -113,7 +113,7 @@ export default {
           this.pie.series[0].data.push({ value: value.KILOS_INVENTARIO, name: value.productor })
           this.pie.legend.data.push(value.productor)
         })
-        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { })
       })
     },
     doRandom () {
