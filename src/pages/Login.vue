@@ -23,6 +23,7 @@ export default {
   methods: {
     ...mapActions('auth', ['loginUser', 'logoutUser']),
     submitForm () {
+      console.log('funciona form')
       this.loginUser(this.formData)
     }
   },

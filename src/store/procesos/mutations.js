@@ -7,6 +7,7 @@ export const destroyToken = (state) => {
   state.token = null
 }
 export const setProductor = (state, productores) => {
+  console.log(productores)
   state.productores = []
   state.productores.push('todo')
   productores.forEach(element => {

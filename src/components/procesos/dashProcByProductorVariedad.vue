@@ -9,9 +9,6 @@
               <div class="text-subtitle2">% Kilos x Variedad en Recepcion</div>
             </div>
           </div>
-          <div class="col-2">
-            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByCodVariedad"/>
-          </div>
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -124,17 +121,18 @@ export default {
       this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { })
       this.pie.series = []
       this.pie.xAxis[0].data = []
-      this.pie.legend.data = Object.values(this.productores)
+      this.pie.legend.data = this.$store.getters['procesos/productores']
       _.pull(this.pie.legend.data, 'todo') // ['a', 'c', 'd']
       this.$store.dispatch('procesos/getChartProcesosRendimiento', { filterOne, filterTwo }).then(response => {
         response.data.forEach((variedades, indexVariedades) => {
           this.pie.xAxis[0].data.push(variedades[0])
         })
         var dataProd = []
-        var productores = Object.values(this.productores)
+        var productores = this.$store.getters['procesos/productores']
         response.data.forEach((variedades, index1) => {
           productores.forEach((productor, index) => {
             variedades[1].forEach((productor2, index) => {
+              console.log(productor2[0].productor)
               if (productor2[0].productor === productor) {
                 dataProd.push([productor2[0].productor, {
                   data: productor2[0].rendimiento,
@@ -206,7 +204,7 @@ export default {
   color:#7f7c88;
 }
 .dash-card{
-  height:90%;
+  height:100%;
   background-color: #ffffff;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 2px 2px rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12);
 }

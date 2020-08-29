@@ -4,6 +4,7 @@ export function loggedIn (state) {
   // return true
 }
 export function productores (state) {
+  console.log(state)
   return state.productores
 }
 export function variedades (state) {

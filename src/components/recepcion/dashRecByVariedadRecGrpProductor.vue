@@ -9,9 +9,6 @@
               <div class="text-subtitle2">Kilos x Variedad en Recepcion</div>
             </div>
           </div>
-          <div class="col-2">
-            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByCodVariedadGrpProductor"/>
-          </div>
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

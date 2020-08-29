@@ -8,8 +8,8 @@
             <q-input
               filled
               v-model="username"
-              label="Email"
-              hint="Email"
+              label="Usuario"
+              hint="Usuario"
               lazy-rules
               :rules="[ val => val && val.length > 0 || 'Please type something']"
             />
@@ -70,7 +70,7 @@ export default {
         this.$store.dispatch('reports/getUserData')
           .then(response => {
             this.loading = false
-            this.$router.push('/')
+            this.$router.push('/dashboard')
           })
       })
     }

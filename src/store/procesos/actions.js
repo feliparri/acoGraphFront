@@ -72,6 +72,7 @@ export function setProductor (context, props) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getProductores', props)
         .then(response => {
+          console.log(response)
           context.commit('setProductor', response.data)
         }).catch(error => {
           reject(error)
