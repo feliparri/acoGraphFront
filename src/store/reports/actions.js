@@ -27,7 +27,7 @@ export function retrieveToken (context, credentials) {
 }
 
 export function getUserData (context) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.get(baseUrl + '/api/user')
@@ -43,7 +43,7 @@ export function getUserData (context) {
 }
 
 export function destroyToken (context) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
 
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ export function destroyToken (context) {
 }
 
 export function getTableData (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getResumenLote?page=1', props)
@@ -76,7 +76,7 @@ export function getTableData (context, props) {
 }
 
 export function getPieChartData (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartData', props)
@@ -90,7 +90,7 @@ export function getPieChartData (context, props) {
 }
 
 export function getPieChartDataByCodVariedadGrpProductor (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadGrpProductor', props)
@@ -104,7 +104,7 @@ export function getPieChartDataByCodVariedadGrpProductor (context, props) {
 }
 
 export function getPieChartDataByCodVariedadInvGrpProductor (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadInvGrpProductor', props)
@@ -118,7 +118,7 @@ export function getPieChartDataByCodVariedadInvGrpProductor (context, props) {
 }
 
 export function getPieChartDataByCodVariedad (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByCodVariedad', props)
@@ -132,7 +132,7 @@ export function getPieChartDataByCodVariedad (context, props) {
 }
 
 export function getPieChartDataByCodVariedadInv (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByCodVariedadInv', props)
@@ -146,7 +146,7 @@ export function getPieChartDataByCodVariedadInv (context, props) {
 }
 
 export function getPieChartDataByPesoMes (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getPieChartDataByPesoMes', props)
@@ -160,7 +160,7 @@ export function getPieChartDataByPesoMes (context, props) {
 }
 
 export function setVariedad (context, props) {
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getVariedades', props)
@@ -183,7 +183,7 @@ export function setChartLoading (context, props) {
 
 export function setProductor (context, props) {
   // context.commit('setProductor', props.xAxisData)
-  Axios.defaults.headers.common.Authorization = 'Bearer ' + context.state.token
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
       Axios.post(baseUrl + '/api/getProductores', props)

@@ -46,7 +46,7 @@ export default {
         }
       },
       legend: {
-        data: ['166480 - LA CUESTA', '95841 - ROBERTO TAMM Y CIA.LTDA.'],
+        data: [],
         type: 'scroll',
         bottom: '75%'
       },
@@ -108,6 +108,11 @@ export default {
     }
   },
   created () {
+    console.log(this.$router)
+    if (this.$router.currentRoute.fullPath === '/procesos') {
+      this.$store.dispatch('procesos/setProductor').then(response => {})
+      this.$store.dispatch('procesos/setVariedad').then(response => {})
+    }
     this.loadPieChartDataByCodVariedad()
     window.addEventListener('resize', this.myEventHandler)
   },
@@ -121,14 +126,16 @@ export default {
       this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { })
       this.pie.series = []
       this.pie.xAxis[0].data = []
-      this.pie.legend.data = this.$store.getters['procesos/productores']
       _.pull(this.pie.legend.data, 'todo') // ['a', 'c', 'd']
       this.$store.dispatch('procesos/getChartProcesosRendimiento', { filterOne, filterTwo }).then(response => {
+        console.log(response)
         response.data.forEach((variedades, indexVariedades) => {
           this.pie.xAxis[0].data.push(variedades[0])
         })
         var dataProd = []
-        var productores = this.$store.getters['procesos/productores']
+        var productores = this.productores
+        console.log(this.$store.getters['procesos/productores'])
+        this.pie.legend.data = this.$store.getters['procesos/productores']
         response.data.forEach((variedades, index1) => {
           productores.forEach((productor, index) => {
             variedades[1].forEach((productor2, index) => {

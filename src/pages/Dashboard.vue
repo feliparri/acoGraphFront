@@ -52,6 +52,13 @@ export default {
     DashRecByVariedadInv,
     DashRecByPesoMes,
     DashProcByProductorVariedad
+  },
+  data: () => ({
+    showDashProcByProductorVariedad: true
+  }),
+  created () {
+  },
+  methods: {
   }
 }
 </script>
