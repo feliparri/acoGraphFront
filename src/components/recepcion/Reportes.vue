@@ -80,10 +80,16 @@
           <DashRecByPesoMes ref="dashPeso"></DashRecByPesoMes>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByVariedad ref="dashVariedadRec"></dashRecByVariedad>
+          <dashRecByVariedadRec ref="dashVariedadRec"></dashRecByVariedadRec>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6">
-          <dashRecByTipo ref="dashVariedadInv"></dashRecByTipo>
+          <dashRecByVariedadInv ref="dashVariedadInv"></dashRecByVariedadInv>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dashRecByVariedadRecGrpProductor v-show="showChartByVariedad" ref="dashVariedadRecGrpProductor"></dashRecByVariedadRecGrpProductor>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6">
+          <dashRecByVariedadInvGrpProductor v-show="showChartByVariedad" ref="dashVariedadInvGrpProductor"></dashRecByVariedadInvGrpProductor>
         </div>
       </div>
     </div>
@@ -92,9 +98,11 @@
 
 <script type="text/babel">
 // import IEcharts from 'vue-echarts-v3/src/full.js'
-import DashRecByPesoMes from '../components/DashRecByPesoMes.vue'
-import dashRecByVariedad from '../components/dashRecByVariedad.vue'
-import dashRecByTipo from '../components/dashRecByTipo.vue'
+import DashRecByPesoMes from '../../components/recepcion/DashRecByPesoMes'
+import dashRecByVariedadRec from '../../components/recepcion/dashRecByVariedadRec'
+import dashRecByVariedadInv from '../../components/recepcion/dashRecByVariedadInv'
+import dashRecByVariedadRecGrpProductor from '../../components/recepcion/dashRecByVariedadRecGrpProductor'
+import dashRecByVariedadInvGrpProductor from '../../components/recepcion/dashRecByVariedadInvGrpProductor'
 import { date } from 'quasar'
 
 export default {
@@ -102,8 +110,10 @@ export default {
   components: {
     // IEcharts
     DashRecByPesoMes,
-    dashRecByVariedad,
-    dashRecByTipo
+    dashRecByVariedadRec,
+    dashRecByVariedadInv,
+    dashRecByVariedadRecGrpProductor,
+    dashRecByVariedadInvGrpProductor
   },
   props: {},
   data: () => ({
@@ -120,6 +130,7 @@ export default {
     optionsdense: true,
     select_disable: false,
     filter: '',
+    showChartByVariedad: false,
     pagination: {
       sortBy: null,
       descending: false,
@@ -156,24 +167,29 @@ export default {
       this.setCmbFilterAll(this.filterOne, this.filterTwo, this.dateFrom, this.dateTo)
     },
     setCmbFilter (value) {
-      this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setActiveFilter', { value }).then(response => { })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
-      console.log(filterOne, filterTwo, dateFrom, dateTo)
+      if (filterOne === 'VARIEDAD') {
+        this.showChartByVariedad = true
+      } else {
+        this.showChartByVariedad = false
+      }
       this.$store.dispatch('reports/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.dashPeso.getPieChartDataByPesoMes(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashVariedadRec.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
       this.$refs.dashVariedadInv.loadPieChartDataByCodVariedadInv(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadRecGrpProductor.loadPieChartDataByCodVariedadGrpProductor(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashVariedadInvGrpProductor.loadPieChartDataByCodVariedadInvGrpProductor(dateFrom, dateTo, filterOne, filterTwo)
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars
       const { page, rowsPerPage, sortBy, descending } = props.pagination
       // eslint-disable-next-line no-unused-vars
       const filter = props.filter
-      console.log(filter)
       this.loading = true
       this.loadTableData(props)
-      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { console.log(response) })
+      this.$store.dispatch('reports/setChartLoading', { loading: true }).then(response => { })
     },
     loadTableData (props) {
       var df = new Date(this.dateFrom)
@@ -224,10 +240,8 @@ export default {
       })
     },
     filterFn (val, update) {
-      // console.log(val === '')
       if (val === '') {
         update(() => {
-          console.log(update)
           this.options = this.columns
 
           // with Quasar v1.7.4+

@@ -5,12 +5,9 @@
         <div class="row q-col-gutter-none">
           <div class="col-10">
             <div class="my-content">
-              <div class="text-h6">Resumen RECEPCION</div>
-              <div class="text-subtitle2">Kilos x Variedad en Inventario</div>
+              <div class="text-h6">Resumen RECEPCION x Productor</div>
+              <div class="text-subtitle2">Kilos x Variedad en Recepcion</div>
             </div>
-          </div>
-          <div class="col-2">
-            <q-btn class="float-right" flat round dense icon="update" @click="loadPieChartDataByCodVariedadInv"/>
           </div>
         </div>
       </div>
@@ -37,7 +34,7 @@ export default {
   data: () => ({
     layout: 'comfortable',
     side: 'left',
-    // loading: true,
+    loading: true,
     pie: {
       title: {
         text: '',
@@ -91,7 +88,7 @@ export default {
     }
   },
   created () {
-    this.loadPieChartDataByCodVariedadInv()
+    this.loadPieChartDataByCodVariedadGrpProductor()
     window.addEventListener('resize', this.myEventHandler)
   },
   destroyed () {
@@ -100,20 +97,27 @@ export default {
   mounted () {
   },
   methods: {
-    loadPieChartDataByCodVariedadInv (dateFrom, dateTo, filterOne, filterTwo) {
+    loadPieChartDataByCodVariedadGrpProductor (dateFrom, dateTo, filterOne, filterTwo) {
       // this.loading = true
       const dFrom = new Date(dateFrom)
       const from = date.formatDate(dFrom, 'YYYY-MM-DD')
       const dTo = new Date(dateTo)
       const to = date.formatDate(dTo, 'YYYY-MM-DD')
-      this.$store.dispatch('reports/getPieChartDataByCodVariedadInv', { from, to, filterOne, filterTwo }).then(response => {
+      this.$store.dispatch('reports/getPieChartDataByCodVariedadGrpProductor', { from, to, filterOne, filterTwo }).then(response => {
         /* DATA */
         this.pie.series[0].data = []
-        response.data.forEach((value, index) => {
-          this.pie.series[0].data.push({ value: value.KILOS_INVENTARIO, name: value.VARIEDAD })
-          this.pie.legend.data.push(value.VARIEDAD)
-        })
-        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { console.log(response) })
+        if (filterOne === 'VARIEDAD') {
+          response.data.forEach((value, index) => {
+            this.pie.series[0].data.push({ value: value.KILOS_RECEPCIONADOS, name: value.productor })
+            this.pie.legend.data.push(value.productor)
+          })
+        } else {
+          response.data.forEach((value, index) => {
+            this.pie.series[0].data.push({ value: value.KILOS_RECEPCIONADOS, name: value.variedad })
+            this.pie.legend.data.push(value.variedad)
+          })
+        }
+        this.$store.dispatch('reports/setChartLoading', { loading: false }).then(response => { })
       })
     },
     doRandom () {
@@ -130,6 +134,8 @@ export default {
     onClick (event, instance, ECharts) {
 
     }
+  },
+  filters: {
   }
 }
 

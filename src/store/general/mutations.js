@@ -7,18 +7,20 @@ export const destroyToken = (state) => {
   state.token = null
 }
 export const setProductor = (state, productores) => {
+  console.log(productores)
   state.productores = []
   state.productores.push('todo')
   productores.forEach(element => {
-    state.productores.push(shortName(element.productor))
+    // state.productores.push(shortName(element.productor))
+    state.productores.push(element.productor)
   })
 }
 
-const shortName = (texto) => {
+/* const shortName = (texto) => {
   var spltext = texto.split('-')
   var txt = spltext[1].substring(0, 15).trim()
   return txt.substring(0, 15)
-}
+} */
 
 export const setVariedad = (state, variedades) => {
   state.variedades = variedades
@@ -43,4 +45,13 @@ export const setActiveFilter = (state, filtro) => {
 
 export const setFiltrarPor = (state, filtrarPor) => {
   state.filtrarPor = filtrarPor.filterTwo !== null ? filtrarPor : { filterTwo: 'todo' }
+}
+
+export const unsetAllGeneralStates = (state, filtrarPor) => {
+  state.token = null
+  state.productores = []
+  state.variedades = []
+  state.filtro = []
+  state.filtrarPor = { filterTwo: 'todo' }
+  state.chartLoading = false
 }
