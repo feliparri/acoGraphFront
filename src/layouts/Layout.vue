@@ -66,7 +66,7 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Procesos',
+          title: 'OBRAS',
           caption: '',
           icon: 'fiber_manual_record',
           link: '/obras',

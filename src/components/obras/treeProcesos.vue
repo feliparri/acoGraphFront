@@ -29,6 +29,7 @@
                 <th class="text-right">PROGRAMA</th>
                 <th class="text-right">REAL</th>
                 <th class="text-right">DESVIO</th>
+                <th class="text-right"><q-icon name="swap_vert" /></th>
               </tr>
             </thead>
             <tbody v-for="(fila, index2) in dataInside" :key="index2">
@@ -39,6 +40,8 @@
                 <td class="text-right" >{{ fila.programa === null ? '0': fila.programa | numberFormat}}</td>
                 <td class="text-right" >{{ fila.real === null ? '0': fila.real | numberFormat}}</td>
                 <td class="text-right" >{{ fila.desvio === null ? '0': fila.desvio | numberFormat}}</td>
+                <td v-if="fila.desvio > 0"> <q-icon style="font-size: 1.5em;" class="text-primary" name="arrow_upward" /> </td>
+                <td v-if="fila.desvio < 0"> <q-icon style="font-size: 1.5em;" class="text-red" name="arrow_downward" /> </td>
               </tr>
             </tbody>
             <!--<tfoot v-for="(filaTotal, index3) in dataInsideTotal" :key="index3 + filaTotal.productor">
