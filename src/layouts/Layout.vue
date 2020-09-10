@@ -11,8 +11,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-          GESTION DE PRODUCCION TEMPORADA 2019-2020
+        <q-toolbar-title>ACO - AVANCE DE OBRAS
         </q-toolbar-title>
 
         <div>
@@ -32,7 +31,7 @@
           header
           class="text-white-8"
         >
-          <img src="../assets/logoTammFix.png" alt="">
+          <img width="90%" src="../assets/aco_logo.png" alt="">
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
@@ -67,24 +66,10 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Dashboard',
-          caption: '',
-          icon: 'fiber_manual_record',
-          link: '/dashboard',
-          disable: false
-        },
-        {
-          title: 'Recepcion',
-          caption: '',
-          icon: 'fiber_manual_record',
-          link: '/recepcion',
-          disable: false
-        },
-        {
           title: 'Procesos',
           caption: '',
           icon: 'fiber_manual_record',
-          link: '/procesos',
+          link: '/obras',
           disable: false
         }
       ]
@@ -94,9 +79,9 @@ export default {
 </script>
 <style>
 .sidebar-background{
-  background-color: #473f5d;
-  color:white;
-  border-right: 1px solid #473f5d !important;
+  background-color: #4C96BA;
+  color: black;
+  border-right: 1px solid #65a3b8 !important;
 }
 .navbar-background{
   background-color: #ffffff;

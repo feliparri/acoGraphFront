@@ -16,44 +16,36 @@
           dense-toggle
           expand-separator
           icon="perm_identity"
-          :label="productor.productor"
+          :label="productor.obras"
           v-for="(productor, index) in data"
           :key="index"
         >
           <q-markup-table dense>
             <thead>
               <tr>
-                <th class="text-left">variedad</th>
-                <th class="text-right">kilos_vac</th>
-                <th class="text-right">kilos_exp</th>
-                <th class="text-right">kilos_merc</th>
-                <th class="text-right">comercial</th>
-                <th class="text-right">desecho</th>
-                <th class="text-right">precalibre</th>
-                <th class="text-right">cajas_exp</th>
-                <th class="text-right">cajas_nac</th>
-                <th class="text-right">rendimiento</th>
+                <th class="text-left">NRO</th>
+                <th class="text-right">INICIO</th>
+                <th class="text-right">TERMINO</th>
+                <th class="text-right">PROGRAMA</th>
+                <th class="text-right">REAL</th>
+                <th class="text-right">DESVIO</th>
               </tr>
             </thead>
             <tbody v-for="(fila, index2) in dataInside" :key="index2">
-              <tr v-if="productor.productor === fila.productor">
-                <td class="text-left" > {{index + 1}} - {{ fila.variedad }}</td>
-                <td class="text-right" >{{ fila.kilos_vac | numberFormat}}</td>
-                <td class="text-right" >{{ fila.kilos_exp | numberFormat}}</td>
-                <td class="text-right" >{{ fila.kilos_merc | numberFormat}}</td>
-                <td class="text-right" >{{ fila.comercial | numberFormat}}</td>
-                <td class="text-right" >{{ fila.desecho | numberFormat}}</td>
-                <td class="text-right" >{{ fila.precalibre | numberFormat}}</td>
-                <td class="text-right" >{{ fila.cajas_exp | numberFormat}}</td>
-                <td class="text-right" >{{ fila.cajas_nac | numberFormat}}</td>
-                <td class="text-right" >{{ fila.rendimiento }}%</td>
+              <tr v-if="productor.obras === fila.estado">
+                <td class="text-left" > {{ fila.nro }}</td>
+                <td class="text-right" >{{ fila.inicio }}</td>
+                <td class="text-right" >{{ fila.termino }}</td>
+                <td class="text-right" >{{ fila.programa === null ? '0': fila.programa | numberFormat}}</td>
+                <td class="text-right" >{{ fila.real === null ? '0': fila.real | numberFormat}}</td>
+                <td class="text-right" >{{ fila.desvio === null ? '0': fila.desvio | numberFormat}}</td>
               </tr>
             </tbody>
-            <tfoot v-for="(filaTotal, index3) in dataInsideTotal" :key="index3 + filaTotal.productor">
+            <!--<tfoot v-for="(filaTotal, index3) in dataInsideTotal" :key="index3 + filaTotal.productor">
               <tr class="total" v-if="productor.productor === filaTotal.productor">
                 <td class="text-left"><b>TOTAL</b></td>
                 <td class="text-right" >{{ filaTotal.kilos_vac | numberFormat}}</td>
-                <td class="text-right" >{{ filaTotal.kilos_exp | numberFormat}}</td>
+                <td class="text-right" >{{ filaTotal.kilos_e xp | numberFormat}}</td>
                 <td class="text-right" >{{ filaTotal.kilos_merc | numberFormat}}</td>
                 <td class="text-right" >{{ filaTotal.comercial | numberFormat}}</td>
                 <td class="text-right" >{{ filaTotal.desecho | numberFormat}}</td>
@@ -62,7 +54,7 @@
                 <td class="text-right" >{{ filaTotal.cajas_nac | numberFormat}} </td>
                 <td class="text-right" ></td>
               </tr>
-            </tfoot>
+            </tfoot>-->
           </q-markup-table>
         </q-expansion-item>
       </q-list>
@@ -102,11 +94,15 @@ export default {
       return this.$store.state.procesos.filtro
     }
   },
-  created () {
+  mounted: function () {
     this.getResumenRendimiento()
   },
   methods: {
     getResumenRendimiento (dateFrom, dateTo, filterOne, filterTwo) {
+      dateFrom = null
+      dateTo = null
+      filterOne = null
+      filterTwo = null
       this.data = []
       this.dataInside = []
       const dFrom = new Date(dateFrom)
@@ -115,33 +111,31 @@ export default {
       const to = date.formatDate(dTo, 'YYYY-MM-DD')
       // var arrChildren = []
       var arrChildrenData = []
-      this.$store.dispatch('procesos/getReporteProcesos', { from, to, filterOne, filterTwo }).then(response => {
+      this.$store.dispatch('procesos/getReporteObras', { from, to, filterOne, filterTwo }).then(response => {
         response.data.forEach((value, index) => {
           value[Object.keys(value)[0]].forEach((value2, index2) => {
-            this.data.push({ productor: Object.keys(value)[0] })
+            this.data.push({ obras: Object.keys(value)[0] })
             value2.forEach((value3, index3) => {
               arrChildrenData.push(
                 {
                   index: Object.keys(value)[0] + '-' + index3,
-                  productor: Object.keys(value)[0],
-                  variedad: value3.variedad,
-                  kilos_vac: (Math.round(Number(value3.kilos_vac))),
-                  kilos_exp: (Math.round(Number(value3.kilos_exp))),
-                  kilos_merc: (Math.round(Number(value3.kilos_merc))),
-                  comercial: (Math.round(Number(value3.comercial))),
-                  desecho: (Math.round(Number(value3.desecho))),
-                  precalibre: (Math.round(Number(value3.precalibre))),
-                  cajas_exp: (Math.round(Number(value3.cajas_exp))),
-                  cajas_nac: (Math.round(Number(value3.cajas_nac))),
-                  rendimiento: Number((value3.rendimiento * 100)).toFixed(2)
+                  estado: Object.keys(value)[0],
+                  nro: value3.nro,
+                  inicio: value3.inicio,
+                  termino: value3.termino,
+                  programa: value3.programa,
+                  real: value3.real,
+                  desvio: value3.desvio
+                  // rendimiento: Number((value3.rendimiento * 100)).toFixed(2)
                 }
               )
               this.dataInside = arrChildrenData
             })
-            this.dataInsideTotal = _(this.dataInside)
-              .groupBy('productor')
+            console.log(this.dataInside)
+            /* this.dataInsideTotal = _(this.dataInside)
+              .groupBy('estado')
               .map((objs, key) => ({
-                productor: key,
+                obras: key,
                 kilos_vac: _.sumBy(objs, 'kilos_vac'),
                 kilos_exp: _.sumBy(objs, 'kilos_exp'),
                 kilos_merc: _.sumBy(objs, 'kilos_merc'),
@@ -152,7 +146,7 @@ export default {
                 cajas_nac: _.sumBy(objs, 'cajas_nac'),
                 rendimiento: _.sumBy(objs, 'rendimiento')
               }))
-              .value()
+              .value() */
           })
         })
       })
@@ -173,7 +167,7 @@ export default {
 <style>
   .list-header {
     color: white;
-    background: #473f5d;
+    background: #4C96BA;
     border-bottom: 1px solid silver;
   }
   .total{

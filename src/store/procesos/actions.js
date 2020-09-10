@@ -24,11 +24,13 @@ export function getTableData (context, props) {
   }
 }
 
-export function getReporteProcesos (context, props) {
+export function getReporteObras (context, props) {
+  console.log(props)
+  console.log(context)
   Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
   if (context.getters.loggedIn) {
     return new Promise((resolve, reject) => {
-      Axios.post(baseUrl + '/api/getReporteProcesos', props)
+      Axios.post(baseUrl + '/api/getReporteObras', props)
         .then(response => {
           resolve(response)
         }).catch(error => {
@@ -44,6 +46,21 @@ export function getChartProcesosRendimiento (context, props) {
     return new Promise((resolve, reject) => {
       console.log('getChartProcesosRendimiento')
       Axios.post(baseUrl + '/api/getChartProcesosRendimiento', props)
+        .then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+
+export function getChartAvanceObras (context, props) {
+  Axios.defaults.headers.common.Authorization = 'Bearer ' + localStorage.getItem('access_token')
+  if (context.getters.loggedIn) {
+    return new Promise((resolve, reject) => {
+      console.log('getChartAvanceObras')
+      Axios.post(baseUrl + '/api/getChartAvanceObras', props)
         .then(response => {
           resolve(response)
         }).catch(error => {

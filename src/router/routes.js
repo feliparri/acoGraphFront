@@ -1,7 +1,7 @@
 import Layout from 'layouts/Layout'
 import Dashboard from 'pages/Dashboard'
-import Recepcion from 'pages/Recepcion'
-import Procesos from 'pages/Procesos'
+// import Recepcion from 'pages/Recepcion'
+import Obras from 'pages/Obras'
 import Login from 'components/auth/login'
 import Logout from 'components/auth/logout'
 
@@ -13,8 +13,8 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       { path: '/dashboard/', name: 'dashboard', component: Dashboard },
-      { path: '/recepcion/', name: 'recepcion', component: Recepcion },
-      { path: '/procesos/', name: 'procesos', component: Procesos }
+      // { path: '/recepcion/', name: 'recepcion', component: Recepcion },
+      { path: '/obras/', name: 'obras', component: Obras }
     ]
   },
   {

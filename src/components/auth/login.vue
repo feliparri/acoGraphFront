@@ -5,7 +5,7 @@
       <div class="row window-height items-center">
         <div class="col-xs-1 col-sm-3 col-md-6 col-lg-8  bg-image window-height"></div>
         <div class="col-xs-11 col-sm-9 col-md-6 col-lg-4 bg-login">
-          <div class="login-heading text-center"><img src="../../assets/logoTammFix.png" alt=""></div>
+          <div class="login-heading text-center"><img src="../../assets/aco_logo.png" alt=""></div>
           <div class="q-pa-sm" >
             <q-card class="my-card center">
               <q-card-section class="form-label-group">
@@ -112,7 +112,7 @@ export default {
         this.$store.dispatch('reports/getUserData')
           .then(response => {
             this.loading = false
-            this.$router.push('/dashboard')
+            this.$router.push('/')
           })
       })
     }
@@ -164,7 +164,7 @@ select:-webkit-autofill:focus {
 }
 
 .bg-image {
-  background-image: url('https://grupotamm.cl/wp-content/uploads/2019/04/tamm-01.jpg');
+  background-image: url('../../assets/aco_fondo.jpg');
   background-size: cover;
   background-position: center;
   -khtml-opacity:.40;

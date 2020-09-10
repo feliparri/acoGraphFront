@@ -1,5 +1,6 @@
 <template>
-  <div class="q-pa-md">
+<div></div>
+  <!--<div class="q-pa-md">
     <div class="row q-col-gutter-lg">
       <div class="col-xs-12 col-sm-12 col-md-12">
         <q-list>
@@ -29,29 +30,29 @@
             <q-separator />
             <q-card>
               <q-card-section>
-                <DashProcByProductorVariedad></DashProcByProductorVariedad>
+                <dashObrasDesviacion></dashObrasDesviacion>
               </q-card-section>
             </q-card>
           </q-expansion-item>
         </q-list>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-import DashRecByPesoMes from '../components/recepcion/DashRecByPesoMes.vue'
-import DashRecByVariedadRec from '../components/recepcion/dashRecByVariedadRec.vue'
-import DashRecByVariedadInv from '../components/recepcion/dashRecByVariedadInv.vue'
+// import DashRecByPesoMes from '../components/recepcion/DashRecByPesoMes.vue'
+// import DashRecByVariedadRec from '../components/recepcion/dashRecByVariedadRec.vue'
+// import DashRecByVariedadInv from '../components/recepcion/dashRecByVariedadInv.vue'
 
-import DashProcByProductorVariedad from '../components/procesos/dashProcByProductorVariedad.vue'
+// import dashObrasDesviacion from '../components/procesos/dashObrasDesviacion.vue'
 
 export default {
   components: {
-    DashRecByVariedadRec,
-    DashRecByVariedadInv,
-    DashRecByPesoMes,
-    DashProcByProductorVariedad
+    // DashRecByVariedadRec,
+    // DashRecByVariedadInv,
+    // DashRecByPesoMes,
+    // dashObrasDesviacion
   },
   data: () => ({
     showDashProcByProductorVariedad: true

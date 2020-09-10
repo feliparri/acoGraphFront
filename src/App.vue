@@ -16,8 +16,8 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('procesos/setProductor').then(response => {})
-    this.$store.dispatch('procesos/setVariedad').then(response => {})
+    // this.$store.dispatch('procesos/setProductor').then(response => {})
+    // this.$store.dispatch('procesos/setVariedad').then(response => {})
   },
   onIdle () {
     // console.log('idle')

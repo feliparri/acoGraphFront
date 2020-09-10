@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <div class="row">
-      <div class="col-12 q-gutter-lg">
+      <!--<div class="col-12 q-gutter-lg">
         <div class="row q-col-gutter-md">
           <div class="col-12 q-table__title">PROCESO PERIODO  <q-btn class=" float-right" round color="secondary" icon="search" @click="searchFilter" /></div>
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -28,12 +28,12 @@
             />
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="col-12">
         <treeProcesos ref="treeProcesos"></treeProcesos>
       </div>
     </div>
-    <q-dialog v-model="dialog" :position="position">
+    <!--<q-dialog v-model="dialog" :position="position">
       <q-card style="min-width: 100%;">
         <q-card-section>
           <div class="text-h6">DETALLE PROCESO</div>
@@ -90,12 +90,12 @@
           <q-btn flat label="OK" v-close-popup />
         </q-card-actions>
       </q-card>
-      </q-dialog>
+    </q-dialog>-->
     <div class="q-pa-sm">
-      <br>
+      <!--<br>
       <q-btn class="float-right" label="Detalle" icon="search" color="primary" @click="open('top')" />
       <br>
-      <br>
+      <br>-->
       <!--<div class="q-col-gutter-md row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" >
           <q-datetime-picker clearable auto-update-value mode="date" label="Desde" v-model="dateFrom" ></q-datetime-picker >
@@ -107,17 +107,17 @@
       <br>
     </div>
     <q-separator/>
-    <dashProcByProductorVariedad ref="dashProcByProductorVariedad"/>
+    <dashObrasAvanceEjec ref="dashObrasAvanceEjec"/>
+    <br>
+    <q-separator/>
+    <dashObrasDesviacion ref="dashObrasDesviacion"/>
   </div>
 </template>
 
 <script type="text/babel">
-// import IEcharts from 'vue-echarts-v3/src/full.js'
-// import DashProcByPesoMes from '../../components/procesos/DashProcByPesoMes.vue'
-// import dashProcByVariedadRec from '../../components/procesos/dashProcByVariedadRec.vue'
-// import dashProcByVariedadInv from '../../components/procesos/dashProcByVariedadInv.vue'
-import treeProcesos from '../../components/procesos/treeProcesos.vue'
-import dashProcByProductorVariedad from '../../components/procesos/dashProcByProductorVariedad.vue'
+import treeProcesos from '../../components/obras/treeProcesos.vue'
+import dashObrasAvanceEjec from '../../components/obras/dashObrasAvanceEjec.vue'
+import dashObrasDesviacion from '../../components/obras/dashObrasDesviacion.vue'
 import { date, exportFile } from 'quasar'
 
 function wrapCsvValue (val, formatFn) {
@@ -146,7 +146,8 @@ export default {
   name: 'reportes',
   components: {
     treeProcesos,
-    dashProcByProductorVariedad
+    dashObrasAvanceEjec,
+    dashObrasDesviacion
     // IEcharts,
     // DashProcByPesoMes
     // dashProcByVariedadRec,
@@ -178,9 +179,9 @@ export default {
     }
   }),
   created () {
-    this.loadTableRows()
-    this.$store.dispatch('procesos/setProductor').then(response => {})
-    this.$store.dispatch('procesos/setVariedad').then(response => {})
+    // this.loadTableRows()
+    // this.$store.dispatch('procesos/setProductor').then(response => {})
+    // this.$store.dispatch('procesos/setVariedad').then(response => {})
   },
   mounted () {
     this.onRequest({
@@ -207,22 +208,22 @@ export default {
       this.setCmbFilterAll(this.filterOne, this.filterTwo, this.dateFrom, this.dateTo)
     },
     setCmbFilter (value) {
-      this.$store.dispatch('procesos/setActiveFilter', { value }).then(response => { })
+      //this.$store.dispatch('procesos/setActiveFilter', { value }).then(response => { })
     },
     setCmbFilterAll (filterOne, filterTwo, dateFrom, dateTo) {
-      this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
+      /*this.$store.dispatch('procesos/setFiltrarPor', { filterTwo }).then(response => {})
       this.$refs.treeProcesos.getResumenRendimiento(dateFrom, dateTo, filterOne, filterTwo)
-      this.$refs.dashProcByProductorVariedad.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)
+      this.$refs.dashProcByProductorVariedad.loadPieChartDataByCodVariedad(dateFrom, dateTo, filterOne, filterTwo)*/
     },
     onRequest (props) {
       // eslint-disable-next-line no-unused-vars
-      const { page, rowsPerPage, sortBy, descending } = props.pagination
+      /*const { page, rowsPerPage, sortBy, descending } = props.pagination
       // eslint-disable-next-line no-unused-vars
       const filter = props.filter
       this.loading = true
-      this.loadTableData(props)
+      this.loadTableData(props)*/
     },
-    loadTableData (props) {
+    /*loadTableData (props) {
       var df = new Date(this.dateFrom)
       var dt = new Date(this.dateTo)
       var dateFrom = date.formatDate(df, 'YYYY-MM-DD')
@@ -242,7 +243,6 @@ export default {
         descending,
         filter
       }).then(response => {
-        /* DATA */
         response.data.data.forEach((value, index) => {
           this.data.push(value)
         })
@@ -261,7 +261,6 @@ export default {
         username: this.username,
         password: this.password
       }).then(response => {
-        /* COLUMNS */
         Object.keys(response.data.data[0]).forEach((value, index) => {
           this.columns.push({ name: value, align: 'left', label: value, field: value, sortable: true })
         })
@@ -331,7 +330,7 @@ export default {
           icon: 'warning'
         })
       }
-    }
+    }*/
   },
   filters: {
     upperCase: function (texto) {
@@ -339,7 +338,6 @@ export default {
     }
   }
 }
-
 </script>
 
 <style scoped>
